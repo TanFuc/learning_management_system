@@ -1,30 +1,39 @@
-const express = require('express');
-const handlebars = require('express-handlebars');
-const morgan = require('morgan')
-const app = express()
-const path = require('path');
+import express from 'express';
+import handlebars from 'express-handlebars';
+import morgan from 'morgan';
+import path from 'path';
+import dotenv from 'dotenv';
 
 // .env
-require('dotenv').config()
+dotenv.config();
 
-// Khai báo port
+// Khai báo
 const port = process.env.PORT || 3000;
 
+// Tạo instance của Express
+const app = express();
+const __dirname = path.resolve('src'); 
+
+
+app.use(express.static(path.join(__dirname, 'public')));
 // HTTP logger
-app.use(morgan('combined'))
+app.use(morgan('combined'));
 
 // Template engine
-app.engine('handlebars', handlebars.engine());
-app.set('view engine', 'handlebars');
-app.set('views', path.join(__dirname, 'views'));
+app.engine('hbs', handlebars.engine({
+  extname: '.hbs',
+}));
+app.set('view engine', 'hbs');
 
-console.log(__dirname);
+// Cấu hình đường dẫn views
+app.set('views', path.join(__dirname, 'resources', 'views'));
 
-//Route
+// Route
 app.get('/', (req, res) => {
-  res.render('home')
-})
+  res.render('home');
+});
 
+// Khởi động server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
