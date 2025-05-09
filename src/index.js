@@ -3,6 +3,8 @@ import handlebars from 'express-handlebars';
 import morgan from 'morgan';
 import path from 'path';
 import dotenv from 'dotenv';
+import route from './routes/index.js';
+import { connectDB } from './utils/db.js';
 
 // .env
 dotenv.config();
@@ -12,26 +14,37 @@ const port = process.env.PORT || 3000;
 
 // Tạo instance của Express
 const app = express();
-const __dirname = path.resolve('src'); 
+const __dirname = path.resolve('src');
 
+// Kết nối DB
+await connectDB();
 
+// Cấu hình files
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  express.urlencoded({
+    extended: true,
+  }),
+);
+app.use(express.json());
+
 // HTTP logger
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 
 // Template engine
-app.engine('hbs', handlebars.engine({
-  extname: '.hbs',
-}));
+app.engine(
+  'hbs',
+  handlebars.engine({
+    extname: '.hbs',
+  }),
+);
 app.set('view engine', 'hbs');
 
 // Cấu hình đường dẫn views
 app.set('views', path.join(__dirname, 'resources', 'views'));
 
 // Route
-app.get('/', (req, res) => {
-  res.render('home');
-});
+route(app);
 
 // Khởi động server
 app.listen(port, () => {

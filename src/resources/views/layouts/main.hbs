@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning Management System</title>
-    <link rel="stylesheet" href="/css/app.css">
-    <script src="js\bootstrap.bundle.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learning Management System</title>
+  <link rel="stylesheet" href="/bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="/bootstrap/bootstrap-icons.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/js/bootstrap.bundle.js"></script>
 </head>
-<body>
-<header>
-{{> header}}
-</header>
+<body class="d-flex flex-column min-vh-100">
+  <header>
+    {{> header}}
+  </header>
+  <main class="flex-fill">
     {{{body}}}
-    <footer>
-        {{> footer}}
-    </footer>
+  </main>
+  <footer class="bg-light text-center py-3 mt-auto">
+    {{> footer}}
+  </footer>
 </body>
 </html>

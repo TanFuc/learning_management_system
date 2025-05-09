@@ -1,2 +1,4 @@
+.eslint.config.js
+.env
 .vscode
 node_modules/
