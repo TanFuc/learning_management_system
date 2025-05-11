@@ -1,9 +1,9 @@
 export const UserController = {
-  index: (req, res) => {
+  index(req, res) {
     res.render('login');
   },
 
-  login: (req, res) => {
+  login(req, res) {
     const { username, password } = req.body;
 
     if (username === 'admin' && password === '12345') {
@@ -13,11 +13,11 @@ export const UserController = {
     }
   },
 
-  register: (req, res) => {
+  register(req, res) {
     res.render('register');
   },
 
-  createUser: (req, res) => {
+  createUser(req, res) {
     const { username, password, email } = req.body;
     res.send(`Đăng ký thành công với tên người dùng: ${username}`);
   },

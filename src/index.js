@@ -3,6 +3,9 @@ import handlebars from 'express-handlebars';
 import morgan from 'morgan';
 import path from 'path';
 import dotenv from 'dotenv';
+import methodOverride from 'method-override';
+import moment from 'moment';
+
 import route from './routes/index.js';
 import { connectDB } from './utils/db.js';
 
@@ -27,6 +30,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(methodOverride('_method'));
 
 // HTTP logger
 // app.use(morgan('combined'));
@@ -36,6 +40,10 @@ app.engine(
   'hbs',
   handlebars.engine({
     extname: '.hbs',
+    helpers: {
+      join: (arr) => arr?.join(', ') || '',
+      formatDate: (date) => moment(date).format('DD/MM/YYYY'),
+    },
   }),
 );
 app.set('view engine', 'hbs');

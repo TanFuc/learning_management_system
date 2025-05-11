@@ -1,0 +1,57 @@
+<div class='container my-5'>
+  <div class='row'>
+    <div class='col-md-6'>
+      <img
+        src='{{course.image}}'
+        class='img-fluid rounded shadow-sm'
+        alt='{{course.name}}'
+      />
+    </div>
+    <div class='col-md-6'>
+      <h2 class='mb-3'>{{course.name}}</h2>
+      <p class='text-muted'>{{course.description}}</p>
+
+      {{#if course.level}}
+        <p><strong>Trình độ:</strong> {{course.level}}</p>
+      {{/if}}
+
+      {{#if course.duration}}
+        <p><strong>Thời lượng:</strong> {{course.duration}}</p>
+      {{/if}}
+
+      {{#if course.price}}
+        <p><strong>Giá:</strong> {{course.price}} VNĐ</p>
+      {{else}}
+        <p><strong>Giá:</strong> Miễn phí</p>
+      {{/if}}
+
+      {{#if course.tags.length}}
+        <p><strong>Tags:</strong>
+          {{#each course.tags}}
+            <span class='badge bg-info text-dark me-1'>{{this}}</span>
+          {{/each}}
+        </p>
+      {{/if}}
+
+      <p><small class='text-muted'>Ngày tạo:
+          {{formatDate course.createdAt}}</small></p>
+
+      <a href='/courses/{{course._id}}/edit' class='btn btn-warning'>Sửa</a>
+
+      <form
+        action='/courses/{{course._id}}?_method=DELETE'
+        method='POST'
+        style='display: inline'
+      >
+        <button
+          class='btn btn-danger'
+          onclick="return confirm('Xóa khóa học này?')"
+        >
+          Xóa
+        </button>
+      </form>
+
+      <a href='/courses' class='btn btn-secondary'>Quay lại</a>
+    </div>
+  </div>
+</div>
