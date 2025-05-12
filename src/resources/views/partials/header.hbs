@@ -21,15 +21,30 @@
     </button>
 
     <div class='collapse navbar-collapse' id='navbarMain'>
-      <!-- Nav links -->
       <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
-        <li class='nav-item'><a class='nav-link active' href='/'>Trang chủ</a></li>
-        <li class='nav-item'><a class='nav-link' href='#'>Giới thiệu</a></li>
-        <li class='nav-item'><a class='nav-link' href='/courses'>Khóa học</a></li>
-        <li class='nav-item'><a class='nav-link' href='#'>Liên hệ</a></li>
+        <li class='nav-item'>
+          <a class='nav-link {{isActive currentUrl "/"}}' href='/'>Trang chủ</a>
+        </li>
+        <li class='nav-item'>
+          <a
+            class='nav-link {{isActive currentUrl "/about"}}'
+            href='/about'
+          >Giới thiệu</a>
+        </li>
+        <li class='nav-item'>
+          <a
+            class='nav-link {{isActive currentUrl "/courses"}}'
+            href='/courses'
+          >Khóa học</a>
+        </li>
+        <li class='nav-item'>
+          <a
+            class='nav-link {{isActive currentUrl "/contact"}}'
+            href='/contact'
+          >Liên hệ</a>
+        </li>
       </ul>
 
-      <!-- Search form -->
       <form class='d-flex me-3' role='search' method='post' action='/'>
         <input
           class='form-control form-control-sm me-2'
@@ -43,11 +58,12 @@
           ></i></button>
       </form>
 
-      <!-- Login/Register buttons -->
-      <div class='d-flex align-items-center'>
-        <a href='/login' class='btn btn-outline-light btn-sm me-2'>Đăng nhập</a>
-        <a href='/register' class='btn btn-light btn-sm'>Đăng ký</a>
-      </div>
-    </div>
-  </div>
-</header>
+   <div class='d-flex align-items-center'>
+  {{#if user}}
+    <span class='text-white me-3'>👋 Xin chào, {{user.username}}</span>
+    <a href='/auth/logout' class='btn btn-light btn-sm'>Đăng xuất</a>
+  {{else}}
+    <a href='/login' class='btn btn-outline-light btn-sm me-2'>Đăng nhập</a>
+    <a href='/register' class='btn btn-light btn-sm'>Đăng ký</a>
+  {{/if}}
+</div>

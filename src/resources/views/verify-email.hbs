@@ -1,0 +1,20 @@
+<main class='container my-5' style='max-width: 500px;'>
+  <div class='card shadow'>
+    <div class='card-body'>
+      <h2 class='text-center mb-4'>Xác Nhận Email</h2>
+
+      {{#if success}}
+        <div class='alert alert-success' role='alert'>{{success}}</div>
+      {{/if}}
+
+      {{#if error}}
+        <div class='alert alert-danger' role='alert'>{{error}}</div>
+      {{/if}}
+
+      <p class='text-center'>
+        Sau khi xác nhận, bạn có thể
+        <a href='/login'>đăng nhập ngay</a>.
+      </p>
+    </div>
+  </div>
+</main>
