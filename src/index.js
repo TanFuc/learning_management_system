@@ -5,8 +5,9 @@ import path from 'path';
 import dotenv from 'dotenv';
 import methodOverride from 'method-override';
 import moment from 'moment';
-
+import cookieParser from 'cookie-parser';
 import route from './routes/index.js';
+import authMiddleware from './middleware/auth.js';
 import { connectDB } from './utils/db.js';
 
 // .env
@@ -23,6 +24,8 @@ const __dirname = path.resolve('src');
 await connectDB();
 
 // Cấu hình files
+app.use(cookieParser());
+// app.use(authMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   express.urlencoded({
@@ -43,6 +46,9 @@ app.engine(
     helpers: {
       join: (arr) => arr?.join(', ') || '',
       formatDate: (date) => moment(date).format('DD/MM/YYYY'),
+      isActive: function (currentUrl, linkUrl, options) {
+        return currentUrl === linkUrl ? 'active' : '';
+      },
     },
   }),
 );

@@ -6,7 +6,10 @@ const CourseController = {
   async index(req, res, next) {
     try {
       const courses = await Course.find({ deleted: false });
-      res.render('courses/index', { courses: multipleToObject(courses) });
+      res.render('courses/index', {
+        courses: multipleToObject(courses),
+        currentUrl: req.originalUrl,
+      });
     } catch (error) {
       next(error);
     }
@@ -85,7 +88,7 @@ const CourseController = {
   async restore(req, res, next) {
     try {
       await Course.updateOne({ _id: req.params.id }, { deleted: false });
-      res.redirect('back');
+      res.redirect('/');
     } catch (error) {
       next(error);
     }
