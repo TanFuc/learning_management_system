@@ -4,6 +4,13 @@
 >
   <div class='card shadow p-4' style='max-width: 400px; width: 100%;'>
     <h3 class='text-center mb-4'>Đăng nhập</h3>
+
+    {{#if error}}
+      <div class='alert alert-danger text-center' role='alert'>
+        {{error}}
+      </div>
+    {{/if}}
+
     <form action='/auth/login' method='POST'>
       <div class='mb-3'>
         <label for='email' class='form-label'>Email</label>
@@ -13,9 +20,11 @@
           id='email'
           name='email'
           required
-          placeholder='Nhập tên đăng nhập'
+          placeholder='Nhập email'
+          value='{{oldInput.email}}'
         />
       </div>
+
       <div class='mb-3'>
         <label for='password' class='form-label'>Mật khẩu</label>
         <input
@@ -27,9 +36,11 @@
           placeholder='Nhập mật khẩu'
         />
       </div>
+
       <div class='d-grid mb-3'>
         <button type='submit' class='btn btn-primary'>Đăng nhập</button>
       </div>
+
       <div class='text-center'>
         <a href='/forgot-password'>Quên mật khẩu?</a>
       </div>

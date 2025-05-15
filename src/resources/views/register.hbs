@@ -3,6 +3,10 @@
     <div class='card-body'>
       <h2 class='text-center mb-4'>Đăng ký tài khoản</h2>
 
+      {{#if error}}
+        <div class="alert alert-danger">{{error}}</div>
+      {{/if}}
+
       <form action='/auth/register' method='POST'>
         <div class='mb-3'>
           <label for='username' class='form-label'>Họ và tên</label>
@@ -12,6 +16,7 @@
             id='username'
             name='username'
             required
+            value='{{oldInput.username}}'
             placeholder='Nguyễn Văn A'
           />
         </div>
@@ -24,6 +29,7 @@
             id='email'
             name='email'
             required
+            value='{{oldInput.email}}'
             placeholder='you@example.com'
           />
         </div>
@@ -55,8 +61,8 @@
           <label for='role' class='form-label'>Bạn là:</label>
           <select class='form-select' id='role' name='role' required>
             <option value=''>-- Chọn vai trò --</option>
-            <option value='student'>Người học</option>
-            <option value='teacher'>Giảng viên</option>
+            <option value='student' {{#if (eq oldInput.role "student")}}selected{{/if}}>Người học</option>
+            <option value='teacher' {{#if (eq oldInput.role "teacher")}}selected{{/if}}>Giảng viên</option>
           </select>
         </div>
 
