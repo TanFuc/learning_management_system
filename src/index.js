@@ -25,7 +25,7 @@ await connectDB();
 
 // Cấu hình files
 app.use(cookieParser());
-// app.use(authMiddleware);
+app.use(authMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   express.urlencoded({
@@ -49,6 +49,26 @@ app.engine(
       isActive: function (currentUrl, linkUrl, options) {
         return currentUrl === linkUrl ? 'active' : '';
       },
+      eq: function (a, b) {
+        return a === b;
+      },
+      inc: (value) => parseInt(value) + 1,
+      trimText: function (text, maxLength) {
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+      },
+      ifEquals: function (arg1, arg2, options) {
+        return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+      },
+      range: (start, end) => {
+        let arr = [];
+        for (let i = start; i <= end; i++) arr.push(i);
+        return arr;
+      },
+      add: (a, b) => a + b,
+      subtract: (a, b) => a - b,
+      gt: (a, b) => a > b,
+      lt: (a, b) => a < b,
     },
   }),
 );
