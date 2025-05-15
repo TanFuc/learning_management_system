@@ -5,7 +5,7 @@ const CourseController = {
   // [GET] /courses
   async index(req, res, next) {
     try {
-      const courses = await Course.find({ deleted: false });
+      const courses = await Course.find({ isDeleted: false });
       res.render('courses/index', {
         courses: multipleToObject(courses),
         currentUrl: req.originalUrl,
@@ -24,7 +24,6 @@ const CourseController = {
   show(req, res, next) {
     Course.findOne({ slug: req.params.slug })
       .then((course) => {
-        console.log(course);
         res.render('courses/show', {
           course: toObject(course),
         });

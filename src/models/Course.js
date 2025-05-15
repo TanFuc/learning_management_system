@@ -25,10 +25,19 @@ const courseSchema = new mongoose.Schema(
   { timestamp: true },
 );
 
-courseSchema.pre('save', function (next) {
-  if (this.name) {
-    this.slug = slugify(this.name, { lower: true });
+courseSchema.pre('save', async function (next) {
+  if (!this.isModified('name')) return next();
+
+  const baseSlug = slugify(this.name, { lower: true, strict: true });
+  let slug = baseSlug;
+  let counter = 1;
+
+  // Lặp để tạo slug chưa tồn tại
+  while (await mongoose.models.Course.exists({ slug })) {
+    slug = `${baseSlug}-${counter++}`;
   }
+
+  this.slug = slug;
   next();
 });
 
