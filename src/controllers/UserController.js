@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
-import nodemailer from 'nodemailer';
+import { validationResult } from 'express-validator';
 import { sendMail } from '../utils/mailer.js';
 import User from '../models/User.js';
 dotenv.config();
@@ -10,28 +10,53 @@ dotenv.config();
 const UserController = {
   // [POST] /auth/login
   async confirmlogin(req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('login', {
+        error: errors.array()[0].msg,
+        oldInput: req.body,
+      });
+    }
     const { email, password } = req.body;
+
     const user = await User.findOne({ email });
 
-    if (!user || !bcrypt.compare(password, user.password)) {
-      return res.render('login', { error: 'Thông tin không chính xác' });
+    if (!user) {
+      return res.render('login', {
+        error: 'Email không tồn tại',
+        oldInput: req.body,
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.render('login', {
+        error: 'Mật khẩu không đúng',
+        oldInput: req.body,
+      });
+    }
+
+    if (!user.isVerified) {
+      return res.render('login', { error: 'Tài khoản chưa xác minh' });
+    }
+
+    if (user.isBlocked) {
+      return res.render('login', { error: 'Tài khoản đã bị chặn' });
     }
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: '1h',
-      },
+      { expiresIn: '1h' },
     );
 
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: 1800000,
+      maxAge: 30 * 60 * 1000,
       secure: false,
     });
 
-    res.redirect('/dashboard');
+    res.redirect('/teacher');
   },
 
   // [POST] /auth/register
@@ -47,18 +72,14 @@ const UserController = {
         });
       }
 
-      console.log('🔍 Đang kiểm tra email:', email);
       const existingUser = await User.findOne({ email });
-      console.log('🔍 Kết quả kiểm tra:', existingUser);
 
       if (existingUser) {
         return res.render('register', { error: 'Email này đã được đăng ký' });
       }
 
-      console.log('🔐 Đang hash mật khẩu...');
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      console.log('🪄 Đang tạo mã xác nhận...');
       const verificationToken = crypto.randomBytes(20).toString('hex');
 
       const newUser = new User({
@@ -70,13 +91,10 @@ const UserController = {
         isVerified: false,
       });
 
-      console.log('💾 Đang lưu người dùng mới...');
       await newUser.save();
 
       const verifyUrl = `http://localhost:3001/auth/verify-email/${verificationToken}`;
-      console.log('🔗 Link xác nhận:', verifyUrl);
 
-      console.log('Đang gửi mail');
       await sendMail({
         to: email,
         subject: 'Xác nhận đăng ký',
@@ -95,16 +113,14 @@ const UserController = {
   // [GET] /auth/verify
   async verifyEmail(req, res) {
     try {
-      console.log('✅ Bắt đầu xử lý verifyEmail');
-
       const { token } = req.params;
-      console.log('🔍 Token nhận được từ URL:', token);
+      console.log('Token nhận được từ URL:', token);
 
       const user = await User.findOne({ verificationToken: token });
-      console.log('📦 Kết quả tìm kiếm user theo token:', user);
+      console.log('Kết quả tìm kiếm user theo token:', user);
 
       if (!user) {
-        console.log('❌ Token không hợp lệ hoặc không tìm thấy user');
+        console.log('Token không hợp lệ hoặc không tìm thấy user');
         return res.render('verify-email', {
           error: 'Mã xác nhận không hợp lệ hoặc đã hết hạn.',
         });
@@ -113,7 +129,7 @@ const UserController = {
       user.isVerified = true;
       user.verificationToken = undefined;
       await user.save();
-      console.log('✅ Đã cập nhật trạng thái xác minh và xoá token');
+      console.log('Đã cập nhật trạng thái xác minh và xoá token');
 
       return res.render('verify-email', {
         success: 'Xác nhận email thành công. Bạn có thể đăng nhập ngay.',
@@ -144,7 +160,7 @@ const UserController = {
 
     const token = crypto.randomBytes(20).toString('hex');
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 tiếng
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     const resetUrl = `http://localhost:3001/auth/reset-password/${token}`;
@@ -201,6 +217,19 @@ const UserController = {
     res.render('reset-password', {
       success: 'Mật khẩu đã được đặt lại. Bạn có thể đăng nhập.',
     });
+  },
+
+  // [POST]
+  async registerValidation(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('register', {
+        error: errors.array()[0].msg,
+        oldInput: req.body,
+      });
+    }
+
+    await UserController.confirmregister(req, res);
   },
 };
 

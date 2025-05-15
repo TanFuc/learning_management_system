@@ -2,16 +2,23 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
-    username: String,
-    email: String,
-    password: String,
-    role: { type: String, enum: ['student', 'teacher'], required: true },
+    username: { type: String },
+    email: { type: String },
+    password: { type: String },
+    role: {
+      type: String,
+      enum: ['admin', 'student', 'teacher'],
+      default: 'student',
+      required: true,
+    },
     isVerified: { type: Boolean, default: false },
     verificationToken: { type: String },
-    resetPasswordToken: String,
-    resetPasswordExpires: Date,
+    isBlocked: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
-  { timestamp: true },
+  { timestamps: true },
 );
 
 const User = mongoose.model('User', userSchema);
