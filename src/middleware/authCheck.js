@@ -14,7 +14,9 @@ const authCheck = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     if (decoded.role !== 'teacher') {
-      return res.redirect('/');
+      return res.redirect('/teacher');
+    } else {
+      return res.redirect('/courses');
     }
 
     next();
