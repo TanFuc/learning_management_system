@@ -1,0 +1,78 @@
+<h2 class="mb-4">Thùng rác khóa học</h2>
+<a href="/admin/courses" class="btn btn-secondary mb-3">Quay lại danh sách khóa học</a>
+
+<form method="GET" action="/admin/courses/trash" class="mb-3">
+  <div class="input-group">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Tìm kiếm khóa học trong thùng rác..."
+      name="keyword"
+      value="{{keyword}}"
+    />
+    <button class="btn btn-primary" type="submit">Tìm</button>
+  </div>
+</form>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Tên</th>
+      <th>Giá</th>
+      <th>Miễn phí</th>
+      <th>Trạng thái</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each courses}}
+      <tr>
+        <td>{{add (add @index ../offset) 1}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.price}}đ</td>
+        <td>{{#if this.isFree}}✔{{else}}✘{{/if}}</td>
+        <td>{{#if this.isPublished}}Công khai{{else}}Riêng tư{{/if}}</td>
+        <td>
+          <form
+            action="/admin/courses/restore/{{this._id}}"
+            method="POST"
+            class="d-inline"
+          >
+            <button
+              type="submit"
+              class="btn btn-sm btn-success"
+              onclick="return confirm('Bạn có chắc muốn khôi phục khóa học này?')"
+            >
+              Khôi phục
+            </button>
+          </form>
+
+          <form
+            action="/admin/courses/force-delete/{{this._id}}"
+            method="POST"
+            class="d-inline"
+          >
+            <button
+              type="submit"
+              class="btn btn-sm btn-danger"
+              onclick="return confirm('Bạn có chắc muốn xóa vĩnh viễn khóa học này?')"
+            >
+              Xóa vĩnh viễn
+            </button>
+          </form>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<nav>
+  <ul class="pagination">
+    {{#each (range 1 totalPages) as |pageNum|}}
+      <li class="page-item {{#if (eq pageNum ../currentPage)}}active{{/if}}">
+        <a class="page-link" href="?keyword={{../keyword}}&page={{pageNum}}">{{pageNum}}</a>
+      </li>
+    {{/each}}
+  </ul>
+</nav>

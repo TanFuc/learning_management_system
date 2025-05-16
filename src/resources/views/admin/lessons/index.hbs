@@ -1,0 +1,28 @@
+<h2>Danh sách bài học trong nhóm: {{lessonGroup.title}}</h2>
+
+<a href="/admin/lesson-groups/{{lessonGroup._id}}/lessons/create" class="btn btn-primary mb-3">Tạo bài học mới</a>
+
+{{#if lessons.length}}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Thứ tự</th>
+        <th>Tiêu đề</th>
+        <th>Video ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lessons}}
+        <tr>
+          <td>{{this.order}}</td>
+          <td>{{this.title}}</td>
+          <td>{{this.videoId}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p>Chưa có bài học nào.</p>
+{{/if}}
+
+<a href="/courses/{{lessonGroup.course}}" class="btn btn-secondary mt-3">Quay lại khóa học</a>

@@ -1,0 +1,35 @@
+<h1 class='mb-4'>Quản lý bình luận</h1>
+<table class='table table-bordered table-hover'>
+  <thead class='table-dark'>
+    <tr>
+      <th>#</th>
+      <th>Người dùng</th>
+      <th>Nội dung</th>
+      <th>Bài đăng</th>
+      <th>Thời gian</th>
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each comments}}
+      <tr>
+        <td>{{@index}}</td>
+        <td>{{this.username}}</td>
+        <td>{{this.content}}</td>
+        <td>{{this.postTitle}}</td>
+        <td>{{this.createdAt}}</td>
+        <td>
+          <a
+            href='/admin/comments/delete/{{this._id}}'
+            class='btn btn-sm btn-danger'
+          >
+            <i class='bi bi-trash'></i>
+            Xoá
+          </a>
+        </td>
+      </tr>
+    {{else}}
+      <tr><td colspan='6' class='text-center text-muted'>Chưa có bình luận nào.</td></tr>
+    {{/each}}
+  </tbody>
+</table>

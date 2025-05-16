@@ -1,0 +1,69 @@
+<div class="mb-3">
+  <label class="form-label">Tên</label>
+  <input type="text" class="form-control" name="name" value="{{course.name}}" required>
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Mô tả</label>
+  <textarea name="description" class="form-control">{{course.description}}</textarea>
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Ảnh (URL)</label>
+  <input type="text" class="form-control" name="image" value="{{course.image}}">
+  {{#if course.image}}
+    <img src="{{course.image}}" alt="Ảnh" height="100" class="mt-2">
+  {{/if}}
+</div>
+
+<div class="mb-3">
+  <label class="form-label">YouTube Video URL / ID</label>
+  <input type="text" class="form-control" name="videoId" value="{{course.videoId}}">
+  {{#if course.videoId}}
+    <iframe
+      class="mt-2"
+      width="300"
+      height="200"
+      src="https://www.youtube.com/embed/{{course.videoId}}"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+  {{/if}}
+</div>
+
+<div class="row">
+  <div class="col-md-6 mb-3">
+    <label class="form-label">Level</label>
+    <input type="text" class="form-control" name="level" value="{{course.level}}">
+  </div>
+  <div class="col-md-6 mb-3">
+    <label class="form-label">Duration</label>
+    <input type="text" class="form-control" name="duration" value="{{course.duration}}">
+  </div>
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Giá</label>
+  <input type="number" class="form-control" name="price" value="{{course.price}}">
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Tags (phân cách bằng dấu phẩy)</label>
+  <input type="text" class="form-control" name="tags" value="{{course.tags}}">
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Giảng viên (ObjectId)</label>
+  <input type="text" class="form-control" name="teacher" value="{{course.teacher}}">
+</div>
+
+<div class="form-check mb-3">
+  <input class="form-check-input" type="checkbox" name="isPublished" id="isPublished"
+    {{#if course.isPublished}}checked{{/if}}>
+  <label class="form-check-label" for="isPublished">
+    Công khai khóa học
+  </label>
+</div>
+
+<button type="submit" class="btn btn-success">Lưu</button>
+<a href="/admin/courses" class="btn btn-secondary ms-2">Hủy</a>

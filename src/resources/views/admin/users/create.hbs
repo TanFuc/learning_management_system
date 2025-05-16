@@ -1,0 +1,51 @@
+<div class='container mt-5'>
+  <div class='col-md-8 mx-auto'>
+    <h2>Thêm người dùng mới</h2>
+    <form action='/admin/users/create' method='POST' class='mt-4'>
+      <div class='mb-3'>
+        <label for='username' class='form-label'>Tên người dùng</label>
+        <input
+          type='text'
+          class='form-control'
+          id='username'
+          name='username'
+          required
+        />
+      </div>
+
+      <div class='mb-3'>
+        <label for='email' class='form-label'>Email</label>
+        <input
+          type='email'
+          class='form-control'
+          id='email'
+          name='email'
+          required
+        />
+      </div>
+
+      <div class='mb-3'>
+        <label for='password' class='form-label'>Mật khẩu</label>
+        <input
+          type='password'
+          class='form-control'
+          id='password'
+          name='password'
+          required
+        />
+      </div>
+
+      <div class='mb-3'>
+        <label for='role' class='form-label'>Vai trò</label>
+        <select class='form-select' id='role' name='role' required>
+          <option value='student'>Học viên</option>
+          <option value='teacher'>Giảng viên</option>
+          <option value='admin'>Quản trị</option>
+        </select>
+      </div>
+
+      <button type='submit' class='btn btn-success'>Tạo mới</button>
+      <a href='/admin/users' class='btn btn-secondary ms-2'>Quay lại</a>
+    </form>
+  </div>
+</div>
