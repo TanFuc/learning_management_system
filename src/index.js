@@ -69,6 +69,22 @@ app.engine(
       subtract: (a, b) => a - b,
       gt: (a, b) => a > b,
       lt: (a, b) => a < b,
+      isWatched: function (watchedList, lessonId, options) {
+        if (watchedList.includes(lessonId.toString())) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
+      formatCurrency: function (value) {
+        return value.toLocaleString('vi-VN') + 'đ';
+      },
+      isPaid(price, options) {
+        if (price > 0) {
+          return options.fn(this);
+        } else {
+          return options.inverse(this);
+        }
+      },
     },
   }),
 );
