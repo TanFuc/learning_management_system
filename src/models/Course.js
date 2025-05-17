@@ -1,6 +1,17 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
+const LessonSchema = new mongoose.Schema({
+  order: Number,
+  title: String,
+  videoId: String,
+});
+
+const LessonGroupSchema = new mongoose.Schema({
+  title: String,
+  subLessons: [LessonSchema],
+});
+
 const courseSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -21,6 +32,7 @@ const courseSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    lessons: [LessonGroupSchema],
   },
   { timestamp: true },
 );
@@ -32,7 +44,6 @@ courseSchema.pre('save', async function (next) {
   let slug = baseSlug;
   let counter = 1;
 
-  // Lặp để tạo slug chưa tồn tại
   while (await mongoose.models.Course.exists({ slug })) {
     slug = `${baseSlug}-${counter++}`;
   }
