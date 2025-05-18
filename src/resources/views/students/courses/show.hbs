@@ -1,0 +1,293 @@
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Danh sách bài học</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      color: #333;
+    }
+
+    .page-wrapper {
+      display: flex;
+      min-height: 100vh;
+      padding: 2rem 3rem;
+      box-sizing: border-box;
+      gap: 3rem;
+      background: #f0f4f8;
+    }
+
+    /* Cột bên trái danh sách bài học */
+    .content {
+      flex: 1 1 60%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      padding: 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content h2 {
+      margin-bottom: 0.5rem;
+      color: #007bff;
+    }
+
+    .content .description {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .content hr {
+      border: none;
+      height: 2px;
+      background: #007bff;
+      margin: 1rem 0 2rem 0;
+      border-radius: 2px;
+    }
+
+    .content h4 {
+      margin-bottom: 1rem;
+      color: #007bff;
+      font-weight: 600;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 0.3rem;
+    }
+
+    .lesson-group {
+      margin-bottom: 1.8rem;
+    }
+
+    .lesson-group > h5 {
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    ul.list-group {
+      list-style: none;
+      padding-left: 1rem;
+      margin: 0;
+    }
+
+    .list-group-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+
+    .list-group-item a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    .list-group-item a:hover {
+      text-decoration: underline;
+    }
+
+    .list-group-item.sub-lesson {
+      padding-left: 2rem;
+      font-style: italic;
+      color: #444;
+    }
+
+    .list-group-item:hover {
+      background-color: #e7f1ff;
+    }
+
+    .badge {
+      background-color: #28a745;
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.25em 0.5em;
+      border-radius: 0.3rem;
+      font-weight: 600;
+    }
+
+    .btn-back {
+      margin-top: auto;
+      align-self: flex-start;
+      padding: 0.6rem 1.2rem;
+      background: #6c757d;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-back:hover {
+      background: #5a6268;
+    }
+
+    /* Cột bên phải ảnh khóa học */
+    .course-image {
+      flex: 0 0 35%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      justify-content: center;
+    }
+
+    .course-image img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .course-image p {
+      margin-top: 1rem;
+      color: #555;
+      font-size: 1rem;
+      text-align: center;
+      line-height: 1.4;
+      padding: 0 0.5rem;
+    }
+  .btn-start {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 2rem;
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .btn-start:hover {
+    background-color: #0056b3;
+    box-shadow: 0 8px 16px rgba(0, 86, 179, 0.6);
+  }
+
+    /* Responsive cho màn hình nhỏ */
+    @media (max-width: 900px) {
+      .page-wrapper {
+        flex-direction: column;
+        padding: 1rem 1.5rem;
+      }
+
+      .content, .course-image {
+        flex: 1 1 100%;
+        width: 100%;
+        margin-bottom: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="content">
+      <h2 id="course-name">Loading...</h2>
+      <p class="description" id="course-desc"></p>
+
+      <hr />
+
+      <h4>Danh sách bài học</h4>
+      <div id="lessons-container"></div>
+
+      <a href="/courses" class="btn-back">← Quay lại danh sách</a>
+    </div>
+
+    <div class="course-image">
+  <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80" alt="Khóa học React" />
+  <p>Hình ảnh minh họa khóa học giúp bạn dễ dàng tiếp thu kiến thức.</p>
+
+  <a href="/courses/react-co-ban/lessons/id1" class="btn-start">Bắt đầu học</a>
+</div>
+  </div>
+
+  <script>
+    const course = {
+      slug: "react-co-ban",
+      name: "Làm chủ React từ cơ bản đến nâng cao",
+      description: "Khóa học giúp bạn hiểu rõ và thành thạo React framework."
+    };
+
+    const mainLessons = [
+      {
+        title: "React cơ bản",
+        subLessons: [
+          { _id: "id1", order: 1, title: "Giới thiệu React" },
+          { _id: "id2", order: 2, title: "JSX và Component" }
+        ]
+      },
+      {
+        title: "React nâng cao",
+        subLessons: [
+          { _id: "id3", order: 1, title: "Hook useState" },
+          { _id: "id4", order: 2, title: "Hook useEffect" }
+        ]
+      }
+    ];
+
+    const LessonGroupIds = ["id1", "id4"];
+
+    function isWatched(watchedIds, lessonId) {
+      return watchedIds.includes(lessonId);
+    }
+
+    function render() {
+      document.getElementById('course-name').textContent = course.name;
+      document.getElementById('course-desc').textContent = course.description;
+
+      const container = document.getElementById('lessons-container');
+      container.innerHTML = "";
+
+      mainLessons.forEach(group => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = "lesson-group";
+
+        const h5 = document.createElement('h5');
+        h5.textContent = group.title;
+        groupDiv.appendChild(h5);
+
+        const ul = document.createElement('ul');
+        ul.className = "list-group";
+
+        group.subLessons.forEach(lesson => {
+          const li = document.createElement('li');
+          li.className = "list-group-item sub-lesson";
+
+          const a = document.createElement('a');
+          a.href = `/courses/${course.slug}/lessons/${lesson._id}`;
+          a.textContent = `${lesson.order}. ${lesson.title}`;
+          li.appendChild(a);
+
+          if (isWatched(LessonGroupIds, lesson._id)) {
+            const badge = document.createElement('span');
+            badge.className = "badge";
+            badge.textContent = "Đã xem";
+            li.appendChild(badge);
+          }
+
+          ul.appendChild(li);
+        });
+
+        groupDiv.appendChild(ul);
+        container.appendChild(groupDiv);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

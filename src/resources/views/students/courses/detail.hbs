@@ -1,0 +1,22 @@
+<h1>{{course.name}}</h1>
+<p><strong>Giảng viên:</strong> {{course.teacher.username}} ({{course.teacher.email}})</p>
+<p>{{course.description}}</p>
+
+{{#if course.image}}
+  <img src="{{course.image}}" alt="Ảnh khóa học" class="img-fluid mb-3" style="max-height: 300px;">
+{{/if}}
+
+{{#if course.videoId}}
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/{{course.videoId}}" frameborder="0" allowfullscreen></iframe>
+{{/if}}
+
+<hr>
+
+<h3>Danh sách nhóm bài học</h3>
+<ul>
+  {{#each lessonGroups}}
+    <li><strong>{{title}}</strong> ({{lessons.length}} bài học)</li>
+  {{/each}}
+</ul>
+
+<a href="/courses/{{course.slug}}/learn" class="btn btn-primary mt-3">Bắt đầu học</a>
