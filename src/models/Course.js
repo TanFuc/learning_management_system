@@ -1,17 +1,6 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
-const LessonSchema = new mongoose.Schema({
-  order: Number,
-  title: String,
-  videoId: String,
-});
-
-const LessonGroupSchema = new mongoose.Schema({
-  title: String,
-  subLessons: [LessonSchema],
-});
-
 const courseSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -32,7 +21,6 @@ const courseSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    lessons: [LessonGroupSchema],
   },
   { timestamp: true },
 );
