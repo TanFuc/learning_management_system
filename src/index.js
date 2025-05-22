@@ -50,7 +50,7 @@ app.engine(
         return currentUrl === linkUrl ? 'active' : '';
       },
       eq: function (a, b) {
-        return a === b;
+        return String(a) === String(b);
       },
       inc: (value) => parseInt(value) + 1,
       trimText: function (text, maxLength) {
@@ -84,6 +84,9 @@ app.engine(
         } else {
           return options.inverse(this);
         }
+      },
+      includes: function (array, value) {
+        return array && array.includes(value.toString());
       },
     },
   }),

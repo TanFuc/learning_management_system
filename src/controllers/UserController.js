@@ -12,7 +12,7 @@ const UserController = {
   async confirmlogin(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.render('login', {
+      return res.render('users/login', {
         error: errors.array()[0].msg,
         oldInput: req.body,
       });
@@ -22,7 +22,7 @@ const UserController = {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.render('login', {
+      return res.render('users/login', {
         error: 'Email không tồn tại',
         oldInput: req.body,
       });
@@ -30,18 +30,18 @@ const UserController = {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.render('login', {
+      return res.render('users/login', {
         error: 'Mật khẩu không đúng',
         oldInput: req.body,
       });
     }
 
     if (!user.isVerified) {
-      return res.render('login', { error: 'Tài khoản chưa xác minh' });
+      return res.render('users/login', { error: 'Tài khoản chưa xác minh' });
     }
 
     if (user.isBlocked) {
-      return res.render('login', { error: 'Tài khoản đã bị chặn' });
+      return res.render('users/login', { error: 'Tài khoản đã bị chặn' });
     }
 
     const token = jwt.sign(
@@ -67,7 +67,7 @@ const UserController = {
       const { username, email, password, role } = req.body;
 
       if (!username || !email || !password || !role) {
-        return res.render('register', {
+        return res.render('users/register', {
           error: 'Vui lòng nhập đầy đủ thông tin.',
         });
       }
@@ -75,7 +75,9 @@ const UserController = {
       const existingUser = await User.findOne({ email });
 
       if (existingUser) {
-        return res.render('register', { error: 'Email này đã được đăng ký' });
+        return res.render('users/register', {
+          error: 'Email này đã được đăng ký',
+        });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -101,12 +103,14 @@ const UserController = {
         text: `Xin chào ${username},\n\nVui lòng nhấn vào liên kết dưới đây để xác nhận email của bạn:\n${verifyUrl}`,
       });
       console.log('Đã gửi mail');
-      res.render('register', {
+      res.render('users/register', {
         success: 'Đã gửi email xác nhận. Vui lòng kiểm tra hộp thư.',
       });
     } catch (error) {
       console.error('❌ Lỗi xảy ra trong quá trình đăng ký:', error);
-      res.render('register', { error: 'Có lỗi xảy ra. Vui lòng thử lại.' });
+      res.render('users/register', {
+        error: 'Có lỗi xảy ra. Vui lòng thử lại.',
+      });
     }
   },
 
@@ -121,7 +125,7 @@ const UserController = {
 
       if (!user) {
         console.log('Token không hợp lệ hoặc không tìm thấy user');
-        return res.render('verify-email', {
+        return res.render('users/verify-email', {
           error: 'Mã xác nhận không hợp lệ hoặc đã hết hạn.',
         });
       }
@@ -131,12 +135,12 @@ const UserController = {
       await user.save();
       console.log('Đã cập nhật trạng thái xác minh và xoá token');
 
-      return res.render('verify-email', {
+      return res.render('users/verify-email', {
         success: 'Xác nhận email thành công. Bạn có thể đăng nhập ngay.',
       });
     } catch (err) {
       console.error('🔥 Lỗi xảy ra trong verifyEmail:', err);
-      return res.status(500).send('Đã xảy ra lỗi hệ thống.');
+      return res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -153,7 +157,7 @@ const UserController = {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.render('forgot-password', {
+      return res.render('users/forgot-password', {
         error: 'Email không tồn tại trong hệ thống.',
       });
     }
@@ -170,7 +174,7 @@ const UserController = {
       subject: 'Đặt lại mật khẩu',
       text: `Vui lòng nhấn vào liên kết sau để đặt lại mật khẩu:\n\n${resetUrl}`,
     });
-    res.render('forgot-password', {
+    res.render('users/forgot-password', {
       success: 'Email đặt lại mật khẩu đã được gửi.',
     });
   },
@@ -184,12 +188,12 @@ const UserController = {
     });
 
     if (!user) {
-      return res.render('reset-password', {
+      return res.render('users/reset-password', {
         error: 'Liên kết không hợp lệ hoặc đã hết hạn.',
       });
     }
 
-    res.render('reset-password', { token });
+    res.render('users/reset-password', { token });
   },
 
   // [POST] /reset-password
@@ -203,7 +207,7 @@ const UserController = {
     });
 
     if (!user) {
-      return res.render('reset-password', {
+      return res.render('users/reset-password', {
         error: 'Liên kết không hợp lệ hoặc đã hết hạn.',
       });
     }
@@ -214,7 +218,7 @@ const UserController = {
     user.resetPasswordExpires = undefined;
     await user.save();
 
-    res.render('reset-password', {
+    res.render('users/reset-password', {
       success: 'Mật khẩu đã được đặt lại. Bạn có thể đăng nhập.',
     });
   },
@@ -222,7 +226,7 @@ const UserController = {
   async registerValidation(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.render('register', {
+      return res.render('users/register', {
         error: errors.array()[0].msg,
         oldInput: req.body,
       });

@@ -12,7 +12,7 @@ export const validateLogin = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.render('login', {
+      return res.render('users/login', {
         error: errors.array()[0].msg,
         oldInput: req.body,
       });

@@ -1,7 +1,7 @@
 const HomeController = {
   // [GET] /
   index(req, res) {
-    res.render('home', {
+    res.render('home/index', {
       user: req.user,
       currentUrl: req.originalUrl,
     });
@@ -9,31 +9,31 @@ const HomeController = {
 
   // [GET] /login
   login(req, res) {
-    res.render('login');
+    res.render('users/login');
   },
 
   // [GET] /register
   register(req, res) {
-    res.render('register');
+    res.render('users/register');
   },
 
   // [GET] /contact
   contact(req, res) {
-    res.render('contact', {
+    res.render('home/contact', {
       currentUrl: req.originalUrl,
     });
   },
 
   // [GET] /about
   about(req, res) {
-    res.render('about', {
+    res.render('home/about', {
       currentUrl: req.originalUrl,
     });
   },
 
   // [GET] /forgot-password
   forgotPassword(req, res) {
-    res.render('forgot-password');
+    res.render('users/forgot-password');
   },
 };
 
