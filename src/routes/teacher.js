@@ -1,13 +1,9 @@
 import express from 'express';
 import authMiddleware from '../middleware/authCheck.js';
-import DashboardController from '../controllers/DashboardController.js';
+import TeacherController from '../controllers/TeacherController.js';
 
 const router = express.Router();
 
-router.get(
-  '/teacher',
-  authMiddleware,
-  DashboardController.showTeacherDashboard,
-);
+router.get('/teacher', authMiddleware, TeacherController.index);
 
 export default router;

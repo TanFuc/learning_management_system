@@ -31,11 +31,35 @@ router.get('/courses/duplicate/:id', AdminCourse.duplicate);
 router.post('/courses/force-delete/:id', AdminCourse.hardDelete);
 router.get('/courses/trash', AdminCourse.trash);
 
-router.get('/courses/:courseId/lesson-groups', AdminLessonController.listLessonGroups);
-router.get('/courses/:courseId/lesson-groups/create', AdminLessonController.showCreateLessonGroupForm);
-router.post('/courses/:courseId/lesson-groups/create', AdminLessonController.createLessonGroup);
-router.get('/lesson-groups/:lessonGroupId/lessons', AdminLessonController.listLessons);
-router.get('/lesson-groups/:lessonGroupId/lessons/create', AdminLessonController.showCreateLessonForm);
-router.post('/lesson-groups/:lessonGroupId/lessons/create', AdminLessonController.createLesson);
+router.get(
+  '/courses/:courseId/lesson-groups',
+  AdminLessonController.listLessonGroups,
+);
+router.get(
+  '/courses/:courseId/lesson-groups/create',
+  AdminLessonController.showCreateLessonGroupForm,
+);
+router.post(
+  '/courses/:courseId/lesson-groups/create',
+  AdminLessonController.createLessonGroup,
+);
+router.get(
+  '/lesson-groups/:lessonGroupId/lessons',
+  AdminLessonController.listLessons,
+);
+router.get('/lesson-groups/:id/edit', AdminLessonController.editGroup);
+router.delete('/lesson-groups/:id', AdminLessonController.deleteGroup);
+router.put('/lesson-groups/:id', AdminLessonController.updateGroup);
+router.get(
+  '/lesson-groups/:lessonGroupId/lessons/create',
+  AdminLessonController.showCreateLessonForm,
+);
+router.post(
+  '/lesson-groups/:lessonGroupId/lessons/create',
+  AdminLessonController.createLesson,
+);
+router.get('/lessons/:id/edit', AdminLessonController.editLesson);
+router.put('/lessons/:id', AdminLessonController.updateLesson);
+router.delete('/lessons/:id', AdminLessonController.deleteLesson);
 
 export default router;
