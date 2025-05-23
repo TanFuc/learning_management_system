@@ -1,22 +1,203 @@
-<h1>{{course.name}}</h1>
-<p><strong>Giảng viên:</strong> {{course.teacher.username}} ({{course.teacher.email}})</p>
-<p>{{course.description}}</p>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Danh sách bài học</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8fafc;
+      color: #333;
+    }
 
-{{#if course.image}}
-  <img src="{{course.image}}" alt="Ảnh khóa học" class="img-fluid mb-3" style="max-height: 300px;">
-{{/if}}
+    .page-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 2rem 3rem;
+      box-sizing: border-box;
+    }
 
-{{#if course.videoId}}
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/{{course.videoId}}" frameborder="0" allowfullscreen></iframe>
-{{/if}}
+    .content {
+      flex: 1 1 60%;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+    }
 
-<hr>
+    .content h2 {
+      margin: 0 0 0.5rem;
+      color: #0d6efd;
+    }
 
-<h3>Danh sách nhóm bài học</h3>
-<ul>
-  {{#each lessonGroups}}
-    <li><strong>{{title}}</strong> ({{lessons.length}} bài học)</li>
-  {{/each}}
-</ul>
+    .content .description {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
 
-<a href="/courses/{{course.slug}}/learn" class="btn btn-primary mt-3">Bắt đầu học</a>
+    .content hr {
+      border: none;
+      height: 2px;
+      background: #0d6efd;
+      margin: 1.5rem 0;
+      border-radius: 2px;
+    }
+
+    .content h4 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #0d6efd;
+      border-bottom: 2px solid #0d6efd;
+      padding-bottom: 0.3rem;
+    }
+
+    .lesson-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .lesson-group > h5 {
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+      color: #333;
+    }
+
+    ul.list-group {
+      list-style: none;
+      padding-left: 1rem;
+      margin: 0;
+    }
+
+    .list-group-item {
+      padding: 0.6rem 0.8rem;
+      background: #f1f5f9;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .list-group-item:hover {
+      background: #e0f0ff;
+    }
+
+    .badge {
+      background-color: #16a34a;
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.25em 0.6em;
+      border-radius: 0.5rem;
+      font-weight: 600;
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 2rem;
+      background: #6c757d;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .btn-back:hover {
+      background: #5a6268;
+    }
+
+    .course-image {
+      flex: 1 1 35%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .course-image img {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .course-image p {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #555;
+      text-align: center;
+    }
+
+    .btn-start {
+      margin-top: 1.5rem;
+      background-color: #0d6efd;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 5px 10px rgba(13, 110, 253, 0.3);
+      transition: background 0.3s ease;
+    }
+
+    .btn-start:hover {
+      background-color: #0a58ca;
+    }
+
+    @media (max-width: 768px) {
+      .page-wrapper {
+        flex-direction: column;
+        padding: 1rem;
+      }
+
+      .content, .course-image {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="content">
+      <h2>{{course.name}}</h2>
+      <p class="description">{{course.description}}</p>
+
+      <hr />
+
+      <h4>Danh sách bài học</h4>
+      {{#each lessonGroups}}
+        <div class="lesson-group">
+          <h5>{{this.title}}</h5>
+          <ul class="list-group">
+            {{#each this.lessons}}
+              <li class="list-group-item">
+                <span>{{this.order}}. {{this.title}}</span>
+                {{#if (includes ../../learnedLessonIds this._id)}}
+                  <span class="badge">Đã học</span>
+                {{/if}}
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      {{/each}}
+
+      <a href="/courses" class="btn-back">← Quay lại danh sách</a>
+    </div>
+
+    <div class="course-image">
+      <img src="{{course.image}}" alt="Ảnh khóa học {{course.name}}" />
+      <p>Hình ảnh minh họa giúp bạn tiếp thu bài học tốt hơn.</p>
+      {{#if lessonGroups.[0].lessons.[0]}}
+        <a href="/courses/{{course.slug}}/lessons" class="btn-start">Bắt đầu học</a>
+      {{/if}}
+    </div>
+  </div>
+</body>
+</html>

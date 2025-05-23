@@ -1,13 +1,40 @@
 <h2>Danh sách nhóm bài học của khóa học: {{course.name}}</h2>
 
-<a href="/admin/courses/{{course._id}}/lesson-groups/create" class="btn btn-primary mb-3">Tạo nhóm bài học mới</a>
+<a
+  href='/admin/courses/{{course._id}}/lesson-groups/create'
+  class='btn btn-primary mb-3'
+>Tạo nhóm bài học mới</a>
 
 {{#if lessonGroups.length}}
-  <ul class="list-group">
+  <ul class='list-group'>
     {{#each lessonGroups}}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        {{this.title}}
-        <a href="/admin/lesson-groups/{{this._id}}/lessons" class="btn btn-sm btn-outline-primary">Xem bài học</a>
+      <li
+        class='list-group-item d-flex justify-content-between align-items-center'
+      >
+        <div>
+          <strong>{{this.title}}</strong>
+        </div>
+        <div>
+          <a
+            href='/admin/lesson-groups/{{this._id}}/lessons'
+            class='btn btn-sm btn-outline-primary me-1'
+          >Xem bài học</a>
+          <a
+            href='/admin/lesson-groups/{{this._id}}/edit'
+            class='btn btn-sm btn-outline-warning me-1'
+          >Sửa</a>
+          <form
+            action='/admin/lesson-groups/{{this._id}}?_method=DELETE'
+            method='POST'
+            class='d-inline'
+            onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhóm này?');"
+          >
+            <button
+              type='submit'
+              class='btn btn-sm btn-outline-danger'
+            >Xóa</button>
+          </form>
+        </div>
       </li>
     {{/each}}
   </ul>
@@ -15,4 +42,5 @@
   <p>Chưa có nhóm bài học nào.</p>
 {{/if}}
 
-<a href="/courses/{{course._id}}" class="btn btn-secondary mt-3">Quay lại khóa học</a>
+<a href='/courses/{{course._id}}' class='btn btn-secondary mt-3'>Quay lại khóa
+  học</a>

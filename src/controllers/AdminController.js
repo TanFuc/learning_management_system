@@ -16,7 +16,7 @@ const AdminController = {
       });
     } catch (error) {
       console.error('Lỗi khi load trang admin dashboard:', error);
-      res.status(500).send('Lỗi server');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -51,7 +51,7 @@ const AdminController = {
       });
     } catch (err) {
       console.error(err);
-      res.status(500).send('Lỗi máy chủ');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -78,7 +78,7 @@ const AdminController = {
       await User.findByIdAndUpdate(req.params.id, { isDeleted: true });
       res.redirect('/admin/users');
     } catch (error) {
-      res.status(500).send('Lỗi khi xóa tạm người dùng.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -87,7 +87,7 @@ const AdminController = {
       await User.findByIdAndUpdate(req.params.id, { isDeleted: false });
       res.redirect('/admin/users');
     } catch (error) {
-      res.status(500).send('Lỗi khi khôi phục người dùng.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -96,7 +96,7 @@ const AdminController = {
       await User.findByIdAndDelete(req.params.id);
       res.redirect('/admin/users');
     } catch (error) {
-      res.status(500).send('Lỗi khi xóa người dùng.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
   // [GET] /posts/edit/
@@ -105,7 +105,7 @@ const AdminController = {
       const course = await Course.findById(req.params.id).lean();
       res.render('admin/edit-course', { course });
     } catch (error) {
-      res.status(500).send('Không tìm thấy bài đăng.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -121,7 +121,7 @@ const AdminController = {
       });
       res.redirect('/admin/posts');
     } catch (error) {
-      res.status(500).send('Lỗi khi cập nhật bài đăng.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -150,7 +150,7 @@ const AdminController = {
 
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).send('Email đã tồn tại!');
+        return res.status(400).render('errors/500', { layout: 'admin' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -166,21 +166,22 @@ const AdminController = {
       res.redirect('/admin/users');
     } catch (error) {
       console.error('Lỗi khi tạo người dùng:', error);
-      res.status(500).send('Đã xảy ra lỗi khi tạo người dùng.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
   async editUserForm(req, res) {
     try {
       const user = await User.findById(req.params.id).lean();
-      if (!user) return res.status(404).send('Không tìm thấy người dùng.');
+      if (!user)
+        return res.status(404).render('errors/500', { layout: 'admin' });
 
       res.render('admin/users/edit', {
         layout: 'admin',
         user,
       });
     } catch (error) {
-      res.status(500).send('Lỗi khi hiển thị form chỉnh sửa.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -196,7 +197,7 @@ const AdminController = {
 
       res.redirect('/admin/users');
     } catch (error) {
-      res.status(500).send('Lỗi khi cập nhật người dùng.');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -205,7 +206,7 @@ const AdminController = {
       await User.updateOne({ _id: req.params.id }, { isBlocked: true });
       res.redirect('/admin/users');
     } catch (err) {
-      res.status(500).send('Có lỗi khi chặn người dùng');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -215,7 +216,7 @@ const AdminController = {
       await User.updateOne({ _id: req.params.id }, { isBlocked: false });
       res.redirect('/admin/users');
     } catch (err) {
-      res.status(500).send('Có lỗi khi mở khóa người dùng');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 };

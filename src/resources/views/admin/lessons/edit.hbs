@@ -1,0 +1,45 @@
+<h2>Chỉnh sửa bài học</h2>
+
+<form action='/admin/lessons/{{lesson._id}}?_method=PUT' method='POST'>
+  <div class='mb-3'>
+    <label for='title' class='form-label'>Tiêu đề</label>
+    <input
+      type='text'
+      class='form-control'
+      id='title'
+      name='title'
+      value='{{lesson.title}}'
+      required
+    />
+  </div>
+
+  <div class='mb-3'>
+    <label for='videoId' class='form-label'>Video ID</label>
+    <input
+      type='text'
+      class='form-control'
+      id='videoId'
+      name='videoId'
+      value='{{lesson.videoId}}'
+      required
+    />
+  </div>
+
+  <div class='mb-3'>
+    <label for='order' class='form-label'>Thứ tự</label>
+    <input
+      type='number'
+      class='form-control'
+      id='order'
+      name='order'
+      value='{{lesson.order}}'
+      required
+    />
+  </div>
+
+  <button type='submit' class='btn btn-primary'>Cập nhật</button>
+  <a
+    href='/admin/lesson-groups/{{lesson.lessonGroup._id}}/lessons'
+    class='btn btn-secondary'
+  >Quay lại</a>
+</form>
