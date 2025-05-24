@@ -45,7 +45,7 @@ const AdminCourseController = {
         offset,
       });
     } catch (err) {
-      res.status(500).send('Lỗi khi lấy danh sách khóa học');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -58,7 +58,7 @@ const AdminCourseController = {
         teachers: multipleToObject(teachers),
       });
     } catch (err) {
-      res.status(500).send('Lỗi khi lấy danh sách giảng viên');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -95,14 +95,15 @@ const AdminCourseController = {
       res.redirect('/admin/courses');
     } catch (err) {
       console.error('Lỗi tạo khóa học:', err);
-      res.status(500).send('Lỗi khi tạo khóa học');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
   async editForm(req, res) {
     try {
       const course = await Course.findById(req.params.id).lean();
-      if (!course) return res.status(404).send('Không tìm thấy khóa học');
+      if (!course)
+        return res.status(404).render('errors/500', { layout: 'admin' });
 
       const teachers = await User.find({ role: 'teacher' }).lean();
 
@@ -112,7 +113,7 @@ const AdminCourseController = {
         teachers,
       });
     } catch (err) {
-      res.status(500).send('Lỗi khi hiển thị form chỉnh sửa');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -132,7 +133,8 @@ const AdminCourseController = {
       } = req.body;
 
       const course = await Course.findById(req.params.id);
-      if (!course) return res.status(404).send('Không tìm thấy khóa học');
+      if (!course)
+        return res.status(404).render('errors/500', { layout: 'admin' });
 
       if (name && name !== course.name) {
         const baseSlug = slugify(name, { lower: true, strict: true });
@@ -161,7 +163,7 @@ const AdminCourseController = {
       res.redirect('/admin/courses');
     } catch (err) {
       console.error(err);
-      res.status(500).send('Lỗi khi cập nhật khóa học');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -170,7 +172,7 @@ const AdminCourseController = {
       await Course.findByIdAndUpdate(req.params.id, { deleted: true });
       res.redirect('/admin/courses');
     } catch (err) {
-      res.status(500).send('Lỗi khi xóa khóa học');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -179,7 +181,7 @@ const AdminCourseController = {
       await Course.findByIdAndUpdate(req.params.id, { deleted: false });
       res.redirect('/admin/courses/trash');
     } catch (err) {
-      res.status(500).send('Lỗi khi khôi phục khóa học');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -188,7 +190,7 @@ const AdminCourseController = {
       await Course.findByIdAndDelete(req.params.id);
       res.redirect('/admin/courses/trash');
     } catch (err) {
-      res.status(500).send('Lỗi khi xóa vĩnh viễn khóa học');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -196,7 +198,7 @@ const AdminCourseController = {
     try {
       const originalCourse = await Course.findById(req.params.id).lean();
       if (!originalCourse)
-        return res.status(404).send('Không tìm thấy khóa học gốc');
+        return res.status(404).render('errors/500', { layout: 'admin' });
 
       const duplicatedCourse = new Course({
         ...originalCourse,
@@ -211,7 +213,7 @@ const AdminCourseController = {
       res.redirect('/admin/courses');
     } catch (err) {
       console.error('Lỗi khi nhân bản khóa học:', err);
-      res.status(500).send('Lỗi khi nhân bản khóa học');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 
@@ -246,7 +248,7 @@ const AdminCourseController = {
       });
     } catch (err) {
       console.error(err);
-      res.status(500).send('Lỗi khi lấy khóa học trong thùng rác');
+      res.status(500).render('errors/500', { layout: 'admin' });
     }
   },
 };
