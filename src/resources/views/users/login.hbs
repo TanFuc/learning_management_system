@@ -13,6 +13,7 @@
 
     <form action='/auth/login' method='POST'>
       <div class='mb-3'>
+        <input type='hidden' name='redirect' value='{{redirectUrl}}' />
         <label for='email' class='form-label'>Email</label>
         <input
           type='text'
