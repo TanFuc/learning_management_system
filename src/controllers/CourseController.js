@@ -111,6 +111,16 @@ const CourseController = {
       next(err);
     }
   },
+
+  starLearning (req, res) {
+    if (!req.user) {
+    // Chưa đăng nhập => chuyển hướng về trang đăng nhập, có thể kèm query redirect để quay lại đây sau khi login
+    return res.redirect(`/login?redirect=/courses/${req.params.slug}/lessons`);
+  }
+  
+  // Đã đăng nhập, chuyển hướng vào trang học
+  res.redirect(`/courses/${req.params.slug}/lessons`);
+  }
 };
 
 export default CourseController;

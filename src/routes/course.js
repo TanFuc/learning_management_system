@@ -4,6 +4,7 @@ import CourseController from '../controllers/CourseController.js';
 const router = express.Router();
 
 router.get('/', CourseController.index);
+router.get('/:slug/start-learning', CourseController.starLearning);
 router.get('/:slug/lessons/:lessonId', CourseController.showLesson);
 router.get('/:slug/lessons', CourseController.showLesson);
 router.get('/:slug', CourseController.show);
