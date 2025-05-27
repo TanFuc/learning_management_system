@@ -55,8 +55,14 @@ const UserController = {
       maxAge: 30 * 60 * 1000,
       secure: false,
     });
+    const redirectUrl = req.body.redirect;
+    console.log('Redirect URL:', redirectUrl);
 
-    res.redirect('/teacher');
+    if (redirectUrl && redirectUrl.startsWith('/')) {
+      res.redirect(redirectUrl);
+    } else {
+      res.redirect('/');
+    }
   },
 
   // [POST] /auth/register

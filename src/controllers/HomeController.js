@@ -9,7 +9,9 @@ const HomeController = {
 
   // [GET] /login
   login(req, res) {
-    res.render('users/login');
+    const redirectUrl = req.query.redirect || '/';
+    res.render('users/login', { redirectUrl });
+    console.log(req.query.redirect, { redirectUrl });
   },
 
   // [GET] /register
