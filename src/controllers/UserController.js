@@ -58,10 +58,22 @@ const UserController = {
     const redirectUrl = req.body.redirect;
     console.log('Redirect URL:', redirectUrl);
 
-    if (redirectUrl && redirectUrl.startsWith('/')) {
-      res.redirect(redirectUrl);
+    if (user.role === 'teacher') {
+      return res.redirect('/teacher/dashboard');
+    } else if (user.role === 'student') {
+      if (
+        redirectUrl &&
+        redirectUrl.startsWith('/') &&
+        redirectUrl !== '/login'
+      ) {
+        return res.redirect(redirectUrl);
+      } else {
+        return res.redirect('/courses');
+      }
+    } else if (user.role === 'admin') {
+      return res.redirect('/admin/dashboard');
     } else {
-      res.redirect('/');
+      return res.redirect('/');
     }
   },
 
@@ -229,11 +241,13 @@ const UserController = {
     });
   },
 
+  // [POST] /register
   async registerValidation(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render('users/register', {
         error: errors.array()[0].msg,
+        success: 'Đã gửi email xác nhận. Vui lòng kiểm tra hộp thư.',
         oldInput: req.body,
       });
     }
