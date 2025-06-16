@@ -2,14 +2,13 @@
   class='navbar navbar-expand-lg navbar-dark bg-primary shadow sticky-top py-3'
 >
   <div class='container-fluid'>
-    <a class='navbar-brand d-flex align-items-center' href='#'>
+    <a class='navbar-brand d-flex align-items-center' href='/'>
       <i class='bi bi-mortarboard fs-3 me-2'></i>
       <strong>LMS Pro</strong>
     </a>
 
     <button
       class='navbar-toggler'
-      name='q'
       type='button'
       data-bs-toggle='collapse'
       data-bs-target='#navbarMain'
@@ -45,25 +44,15 @@
         </li>
       </ul>
 
-      <form class='d-flex me-3' role='search' method='post' action='/'>
-        <input
-          class='form-control form-control-sm me-2'
-          name='q'
-          type='search'
-          placeholder='Tìm kiếm...'
-          aria-label='Search'
-        />
-        <button class='btn btn-outline-light btn-sm' type='submit'><i
-            class='bi bi-search'
-          ></i></button>
-      </form>
-
-   <div class='d-flex align-items-center'>
-  {{#if user}}
-    <span class='text-white me-3'>👋 Xin chào, {{user.username}}</span>
-    <a href='/auth/logout' class='btn btn-light btn-sm'>Đăng xuất</a>
-  {{else}}
-    <a href='/login' class='btn btn-outline-light btn-sm me-2'>Đăng nhập</a>
-    <a href='/register' class='btn btn-light btn-sm'>Đăng ký</a>
-  {{/if}}
-</div>
+      <div class='d-flex align-items-center'>
+        {{#if user}}
+          <span class='text-white me-3'>👋 Xin chào, {{user.username}}</span>
+          <a href='/auth/logout' class='btn btn-light btn-sm'>Đăng xuất</a>
+        {{else}}
+          <a href='/login' class='btn btn-outline-light btn-sm me-2'>Đăng nhập</a>
+          <a href='/register' class='btn btn-light btn-sm'>Đăng ký</a>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</header>

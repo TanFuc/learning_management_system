@@ -1,50 +1,5 @@
-<body class='bg-light'>
-  <div class='container my-5'>
-    <h1 class='text-center mb-4'>Danh sách Khóa học</h1>
-
-    <div class='text-end mb-3'>
-      <a href='/courses/create' class='btn btn-primary'>+ Thêm khóa học</a>
-    </div>
-
-    <div class='row row-cols-1 row-cols-md-3 g-4'>
-      {{#each courses}}
-        <div class='col'>
-          <div class='card h-100'>
-            <img
-              src='{{this.image}}'
-              class='card-img-top'
-              alt='{{this.name}}'
-            />
-            <div class='card-body'>
-              <h5 class='card-title'>{{this.name}}</h5>
-              <p class='card-text'>{{this.description}}</p>
-              <p class='card-text'>
-                <small class='text-muted'>Ngày tạo:
-                  {{formatDate this.createdAt}}</small>
-              </p>
-              <div class='d-flex justify-content-between'>
-                <a
-                  href='/courses/{{this.slug}}'
-                  class='btn btn-sm btn-info text-white'
-                >Xem</a>
-                <a
-                  href='/courses/{{this._id}}/edit'
-                  class='btn btn-sm btn-warning'
-                >Sửa</a>
-                <form
-                  action='/courses/{{this._id}}?_method=DELETE'
-                  method='POST'
-                >
-                  <button
-                    class='btn btn-sm btn-danger'
-                    onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
-                  >Xóa</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      {{/each}}
-    </div>
-  </div>
-</body>
+<div class="text-center mt-5">
+    <h1 class="display-4">Chào mừng đến với trang quản lý khóa học</h1>
+    <p class="lead mt-3">Bạn có thể thêm, sửa, xoá hoặc xem thông tin khóa học tại đây.</p>
+    <a href="/teachers/courses" class="btn btn-primary mt-4">+ Thêm khóa học mới</a>
+</div>

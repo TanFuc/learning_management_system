@@ -1,19 +1,26 @@
 <h2>Thêm nhóm bài học mới cho khóa học: {{course.name}}</h2>
 
-<form action="/admin/courses/{{course._id}}/lesson-groups/create" method="POST" class="mt-4">
-  <div class="mb-3">
-    <label for="title" class="form-label">Tiêu đề nhóm bài học</label>
+<form
+  action='/admin/courses/{{course._id}}/lesson-groups/create'
+  method='POST'
+  class='mt-4'
+>
+  <div class='mb-3'>
+    <label for='title' class='form-label'>Tiêu đề nhóm bài học</label>
     <input
-      type="text"
-      id="title"
-      name="title"
-      class="form-control"
-      placeholder="Nhập tiêu đề nhóm bài học"
+      type='text'
+      id='title'
+      name='title'
+      class='form-control'
+      placeholder='Nhập tiêu đề nhóm bài học'
       required
       autofocus
     />
   </div>
 
-  <button type="submit" class="btn btn-primary">Tạo nhóm bài học</button>
-  <a href="/admin/courses/{{course._id}}/lesson-groups" class="btn btn-secondary ms-2">Hủy</a>
+  <button type='submit' class='btn btn-primary'>Tạo nhóm bài học</button>
+  <a
+    href='/admin/courses/{{course._id}}/lesson-groups'
+    class='btn btn-secondary ms-2'
+  >Hủy</a>
 </form>

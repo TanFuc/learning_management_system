@@ -1,42 +1,49 @@
 <h2>Thêm bài học mới cho nhóm: {{lessonGroup.title}}</h2>
 
-<form action="/admin/lesson-groups/{{lessonGroup._id}}/lessons/create" method="POST" class="mt-4">
-  <div class="mb-3">
-    <label for="order" class="form-label">Thứ tự bài học</label>
+<form
+  action='/admin/lesson-groups/{{lessonGroup._id}}/lessons/create'
+  method='POST'
+  class='mt-4'
+>
+  <div class='mb-3'>
+    <label for='order' class='form-label'>Thứ tự bài học</label>
     <input
-      type="number"
-      id="order"
-      name="order"
-      class="form-control"
-      placeholder="Nhập thứ tự bài học (ví dụ: 1, 2, 3...)"
-      min="1"
+      type='number'
+      id='order'
+      name='order'
+      class='form-control'
+      placeholder='Nhập thứ tự bài học (ví dụ: 1, 2, 3...)'
+      min='1'
       required
     />
   </div>
 
-  <div class="mb-3">
-    <label for="title" class="form-label">Tiêu đề bài học</label>
+  <div class='mb-3'>
+    <label for='title' class='form-label'>Tiêu đề bài học</label>
     <input
-      type="text"
-      id="title"
-      name="title"
-      class="form-control"
-      placeholder="Nhập tiêu đề bài học"
+      type='text'
+      id='title'
+      name='title'
+      class='form-control'
+      placeholder='Nhập tiêu đề bài học'
       required
     />
   </div>
 
-  <div class="mb-3">
-    <label for="videoId" class="form-label">ID video (nếu có)</label>
+  <div class='mb-3'>
+    <label for='videoId' class='form-label'>ID video (nếu có)</label>
     <input
-      type="text"
-      id="videoId"
-      name="videoId"
-      class="form-control"
-      placeholder="Nhập ID video YouTube hoặc liên kết"
+      type='text'
+      id='videoId'
+      name='videoId'
+      class='form-control'
+      placeholder='Nhập ID video YouTube hoặc liên kết'
     />
   </div>
 
-  <button type="submit" class="btn btn-primary">Tạo bài học</button>
-  <a href="/admin/lesson-groups/{{lessonGroup._id}}/lessons" class="btn btn-secondary ms-2">Hủy</a>
+  <button type='submit' class='btn btn-primary'>Tạo bài học</button>
+  <a
+    href='/admin/lesson-groups/{{lessonGroup._id}}/lessons'
+    class='btn btn-secondary ms-2'
+  >Hủy</a>
 </form>

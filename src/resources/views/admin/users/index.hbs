@@ -19,53 +19,62 @@
       <th>Email</th>
       <th>Vai trò</th>
       <th>Trạng thái</th>
+      <th>Xác minh</th>
       <th>Hành động</th>
     </tr>
   </thead>
   <tbody>
     {{#each users}}
-      <tr class="{{#if this.isDeleted}}table-secondary text-muted{{/if}}">
-        <td class="text-center">{{inc (add ../startIndex @index)}}</td>
-        <td>{{this.username}}</td>
-        <td>{{this.email}}</td>
-        <td class="text-center text-capitalize">
-          <div class="badge bg-primary">{{this.role}}</div>
-        </td>
-        <td class="text-center">
-        
-          {{#if this.isDeleted}}
-            <span class='badge bg-secondary'>Đã xóa tạm</span>
-          {{else if this.isBlocked}}
-            <span class='badge bg-danger'>Bị chặn</span>
-          {{else}}
-            <span class='badge bg-success'>Hoạt động</span>
-          {{/if}}
-        </td>
-        <td class="text-center d-flex gap-2 justify-content-center flex-wrap">
-          {{#if this.isDeleted}}
-            <a href="/admin/users/restore/{{this._id}}" class="btn btn-sm btn-warning">
-              Khôi phục
-            </a>
-            <a href="/admin/users/hard-delete/{{this._id}}" class="btn btn-sm btn-dark" onclick="return confirm('Bạn chắc chắn muốn xóa vĩnh viễn người dùng này?')">
-              Xóa vĩnh viễn
-            </a>
-          {{else}}
-            <a href="/admin/users/edit/{{this._id}}" class="btn btn-sm btn-info">Sửa</a>
-            {{#if this.isBlocked}}
-              <a href="/admin/users/unblock/{{this._id}}" class="btn btn-sm btn-success">
-                Mở khóa
-              </a>
-            {{else}}
-              <a href="/admin/users/block/{{this._id}}" class="btn btn-sm btn-danger">
-                Chặn
-              </a>
-            {{/if}}
-            <a href="/admin/users/soft-delete/{{this._id}}" class="btn btn-sm btn-secondary">
-              Xóa tạm
-            </a>
-          {{/if}}
-        </td>
-      </tr>
+    <tr class="{{#if this.isDeleted}}table-secondary text-muted{{/if}}">
+      <td class="text-center">{{inc (add ../startIndex @index)}}</td>
+      <td>{{this.username}}</td>
+      <td>{{this.email}}</td>
+      <td class="text-center text-capitalize">
+        <div class="badge bg-primary">{{this.role}}</div>
+      </td>
+      <td class="text-center">
+
+        {{#if this.isDeleted}}
+        <span class='badge bg-secondary'>Đã xóa tạm</span>
+        {{else if this.isBlocked}}
+        <span class='badge bg-danger'>Bị chặn</span>
+        {{else}}
+        <span class='badge bg-success'>Hoạt động</span>
+        {{/if}}
+      </td>
+      <td class="text-center">
+        {{#if this.isVerified}}
+        <span class="badge bg-success">Đã xác minh</span>
+        {{else}}
+        <span class="badge bg-warning text-dark">Chưa xác minh</span>
+        {{/if}}
+      </td>
+      <td class="text-center d-flex gap-2 justify-content-center flex-wrap">
+        {{#if this.isDeleted}}
+        <a href="/admin/users/restore/{{this._id}}" class="btn btn-sm btn-warning">
+          Khôi phục
+        </a>
+        <a href="/admin/users/hard-delete/{{this._id}}" class="btn btn-sm btn-dark"
+          onclick="return confirm('Bạn chắc chắn muốn xóa vĩnh viễn người dùng này?')">
+          Xóa vĩnh viễn
+        </a>
+        {{else}}
+        <a href="/admin/users/edit/{{this._id}}" class="btn btn-sm btn-info">Sửa</a>
+        {{#if this.isBlocked}}
+        <a href="/admin/users/unblock/{{this._id}}" class="btn btn-sm btn-success">
+          Mở khóa
+        </a>
+        {{else}}
+        <a href="/admin/users/block/{{this._id}}" class="btn btn-sm btn-danger">
+          Chặn
+        </a>
+        {{/if}}
+        <a href="/admin/users/soft-delete/{{this._id}}" class="btn btn-sm btn-secondary">
+          Xóa tạm
+        </a>
+        {{/if}}
+      </td>
+    </tr>
     {{/each}}
   </tbody>
 </table>
@@ -73,9 +82,9 @@
 <nav>
   <ul class="pagination justify-content-center">
     {{#each (range 1 totalPages)}}
-      <li class="page-item {{#ifEquals this ../currentPage}}active{{/ifEquals}}">
-        <a class="page-link" href="?page={{this}}&keyword={{../keyword}}">{{this}}</a>
-      </li>
+    <li class="page-item {{#ifEquals this ../currentPage}}active{{/ifEquals}}">
+      <a class="page-link" href="?page={{this}}&keyword={{../keyword}}">{{this}}</a>
+    </li>
     {{/each}}
   </ul>
 </nav>

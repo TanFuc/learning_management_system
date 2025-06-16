@@ -1,4 +1,5 @@
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,7 +59,7 @@
       margin-bottom: 1.5rem;
     }
 
-    .lesson-group > h5 {
+    .lesson-group>h5 {
       font-size: 1rem;
       margin-bottom: 0.6rem;
       color: #333;
@@ -157,12 +158,14 @@
         padding: 1rem;
       }
 
-      .content, .course-image {
+      .content,
+      .course-image {
         width: 100%;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="page-wrapper">
     <div class="content">
@@ -173,19 +176,19 @@
 
       <h4>Danh sách bài học</h4>
       {{#each lessonGroups}}
-        <div class="lesson-group">
-          <h5>{{this.title}}</h5>
-          <ul class="list-group">
-            {{#each this.lessons}}
-              <li class="list-group-item">
-                <span>{{this.order}}. {{this.title}}</span>
-                {{#if (includes ../../learnedLessonIds this._id)}}
-                  <span class="badge">Đã học</span>
-                {{/if}}
-              </li>
-            {{/each}}
-          </ul>
-        </div>
+      <div class="lesson-group">
+        <h5>{{this.title}}</h5>
+        <ul class="list-group">
+          {{#each this.lessons}}
+          <li class="list-group-item">
+            <span>{{this.order}}. {{this.title}}</span>
+            {{#if (includes ../../learnedLessonIds this._id)}}
+            <span class="badge">Đã học</span>
+            {{/if}}
+          </li>
+          {{/each}}
+        </ul>
+      </div>
       {{/each}}
 
       <a href="/courses" class="btn-back">← Quay lại danh sách</a>
@@ -195,9 +198,17 @@
       <img src="{{course.image}}" alt="Ảnh khóa học {{course.name}}" />
       <p>Hình ảnh minh họa giúp bạn tiếp thu bài học tốt hơn.</p>
       {{#if lessonGroups.[0].lessons.[0]}}
-        <a href="/courses/{{course.slug}}/start-learning" class="btn-start">Bắt đầu học</a>
+      {{#if (eq course.price 0)}}
+      <a href="/courses/{{course.slug}}/start-learning" class="btn-start">Bắt đầu học</a>
+      {{else}}
+      <a href="/courses/{{course.slug}}/register" class="btn-start">
+        Đăng ký học ngay với giá {{formatCurrency course.price}}
+      </a>
       {{/if}}
+      {{/if}}
+
     </div>
   </div>
 </body>
+
 </html>

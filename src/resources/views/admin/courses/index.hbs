@@ -3,13 +3,7 @@
 <a href="/admin/courses/trash" class="btn btn-danger mb-3 ms-2">Xem Thùng rác</a>
 <form method='GET' action='/admin/courses' class='mb-3'>
   <div class='input-group'>
-    <input
-      type='text'
-      class='form-control'
-      placeholder='Tìm kiếm khóa học...'
-      name='keyword'
-      value='{{keyword}}'
-    />
+    <input type='text' class='form-control' placeholder='Tìm kiếm khóa học...' name='keyword' value='{{keyword}}' />
     <button class='btn btn-primary' type='submit'>Tìm</button>
   </div>
 </form>
@@ -18,6 +12,7 @@
     <tr>
       <th>#</th>
       <th>Tên</th>
+      <th>Giáo viên</th>
       <th>Giá</th>
       <th>Miễn phí</th>
       <th>Trạng thái</th>
@@ -26,46 +21,41 @@
   </thead>
   <tbody>
     {{#each courses}}
-      <tr>
-        <td>{{add (add @index ../offset) 1}}</td>
-        <td>{{this.name}}</td>
-        <td>{{this.price}}đ</td>
-        <td>{{#if this.isFree}}✔{{else}}✘{{/if}}</td>
-        <td>{{#if this.isPublished}}Công khai{{else}}Riêng tư{{/if}}</td>
-        <td>
-          <a
-            href='/admin/courses/edit/{{this._id}}'
-            class='btn btn-sm btn-warning'
-          >Sửa</a>
-          <form
-            action='/admin/courses/delete/{{this._id}}'
-            method='POST'
-            class='d-inline'
-          >
-            <button
-              class='btn btn-sm btn-danger'
-              onclick="return confirm('Xóa?')"
-            >Xóa</button>
-          </form>
-          <a
-  href="/admin/courses/duplicate/{{this._id}}"
-  class="btn btn-sm btn-secondary"
-  onclick="return confirm('Bạn có chắc muốn nhân bản khóa học này?')"
->
-  Nhân bản
-</a>
-  <a href="/admin/courses/{{this._id}}/lesson-groups" class="btn btn-sm btn-info ms-1">Nhóm bài học</a>
-        </td>
-      </tr>
+    <tr>
+      <td>{{add (add @index ../offset) 1}}</td>
+      <td>{{this.name}}</td>
+      <td>
+        {{#if this.teacher}}
+        {{this.teacher.username}}<br />
+        <small class="text-muted">{{this.teacher.email}}</small>
+        {{else}}
+        <span class="text-muted">Chưa có</span>
+        {{/if}}
+      </td>
+      <td>{{this.price}}đ</td>
+      <td>{{#if this.isFree}}✔{{else}}✘{{/if}}</td>
+      <td>{{#if this.isPublished}}Công khai{{else}}Riêng tư{{/if}}</td>
+      <td>
+        <a href='/admin/courses/edit/{{this._id}}' class='btn btn-sm btn-warning'>Sửa</a>
+        <form action='/admin/courses/delete/{{this._id}}' method='POST' class='d-inline'>
+          <button class='btn btn-sm btn-danger' onclick="return confirm('Xóa?')">Xóa</button>
+        </form>
+        <a href="/admin/courses/duplicate/{{this._id}}" class="btn btn-sm btn-secondary"
+          onclick="return confirm('Bạn có chắc muốn nhân bản khóa học này?')">
+          Nhân bản
+        </a>
+        <a href="/admin/courses/{{this._id}}/lesson-groups" class="btn btn-sm btn-info ms-1">Nhóm bài học</a>
+      </td>
+    </tr>
     {{/each}}
   </tbody>
 </table>
 <nav>
   <ul class="pagination">
     {{#each (range 1 totalPages) as |pageNum|}}
-      <li class="page-item {{#if (eq pageNum ../currentPage)}}active{{/if}}">
-        <a class="page-link" href="?keyword={{../keyword}}&page={{pageNum}}">{{pageNum}}</a>
-      </li>
+    <li class="page-item {{#if (eq pageNum ../currentPage)}}active{{/if}}">
+      <a class="page-link" href="?keyword={{../keyword}}&page={{pageNum}}">{{pageNum}}</a>
+    </li>
     {{/each}}
   </ul>
 </nav>

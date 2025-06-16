@@ -12,7 +12,7 @@
   <label class="form-label">Ảnh (URL)</label>
   <input type="text" class="form-control" name="image" value="{{course.image}}">
   {{#if course.image}}
-    <img src="{{course.image}}" alt="Ảnh" height="100" class="mt-2">
+  <img src="{{course.image}}" alt="Ảnh" height="100" class="mt-2">
   {{/if}}
 </div>
 
@@ -20,14 +20,8 @@
   <label class="form-label">YouTube Video URL / ID</label>
   <input type="text" class="form-control" name="videoId" value="{{course.videoId}}">
   {{#if course.videoId}}
-    <iframe
-      class="mt-2"
-      width="300"
-      height="200"
-      src="https://www.youtube.com/embed/{{course.videoId}}"
-      frameborder="0"
-      allowfullscreen
-    ></iframe>
+  <iframe class="mt-2" width="300" height="200" src="https://www.youtube.com/embed/{{course.videoId}}" frameborder="0"
+    allowfullscreen></iframe>
   {{/if}}
 </div>
 
@@ -54,19 +48,19 @@
 
 <div class="mb-3">
   <label class="form-label">Giảng viên</label>
-  <select class="form-select select2" name="teacher" required>
+  <select class="form-select" name="teacher" required>
     <option value="">-- Chọn giảng viên --</option>
     {{#each teachers}}
-      <option value="{{this._id}}" {{#ifEquals this._id ../teacher}}selected{{/ifEquals}}>
-        {{this.username}} ({{this.email}})
-      </option>
+    <option value="{{this._id}}" {{#if (eq this._id ../course.teacher)}}selected{{/if}}>
+      {{this.username}}
+    </option>
     {{/each}}
   </select>
 </div>
 
 <div class="form-check mb-3">
-  <input class="form-check-input" type="checkbox" name="isPublished" id="isPublished"
-    {{#if course.isPublished}}checked{{/if}}>
+  <input class="form-check-input" type="checkbox" name="isPublished" id="isPublished" {{#if
+    course.isPublished}}checked{{/if}}>
   <label class="form-check-label" for="isPublished">
     Công khai khóa học
   </label>
@@ -74,11 +68,3 @@
 
 <button type="submit" class="btn btn-success">Lưu</button>
 <a href="/admin/courses" class="btn btn-secondary ms-2">Hủy</a>
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    $('.select2').select2({ placeholder: "Chọn giảng viên", allowClear: true });
-  });
-</script>

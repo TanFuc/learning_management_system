@@ -1,0 +1,40 @@
+<h2>Danh sách bài học trong nhóm: {{lessonGroup.title}}</h2>
+
+<a href='/teacher/lesson-groups/{{lessonGroup._id}}/lessons/create' class='btn btn-primary mb-3'>Tạo bài học mới</a>
+
+{{#if lessons.length}}
+<table class='table table-bordered'>
+  <thead>
+    <tr>
+      <th>Thứ tự</th>
+      <th>Tiêu đề</th>
+      <th>Video ID</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each lessons}}
+    <tr>
+      <td>{{this.order}}</td>
+      <td>{{this.title}}</td>
+      <td>{{this.videoId}}</td>
+      <td>
+        <a href='/teacher/lessons/{{this._id}}/edit' class='btn btn-sm btn-warning'>Sửa</a>
+
+        <form action='/teacher/lessons/{{this._id}}?_method=DELETE' method='POST' style='display:inline;'>
+          <button type='submit' class='btn btn-sm btn-danger'
+            onclick="return confirm('Bạn có chắc muốn xóa bài học này không?')">
+            Xóa
+          </button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{else}}
+<p>Chưa có bài học nào.</p>
+{{/if}}
+
+<a href='/teacher/courses/{{lessonGroup.course}}' class='btn btn-secondary mt-3'>Quay
+  lại khóa học</a>
