@@ -1,24 +1,11 @@
-import mongoose from 'mongoose';
-import slugify from 'slugify';
-import { v4 as uuidv4 } from 'uuid';
 import User from '../models/User.js';
 import Course from '../models/Course.js';
-import { multipleToObject } from '../utils/mongoose.js';
 import extractVideoId from '../utils/extractVideo.js';
+import { v4 as uuidv4 } from 'uuid';
+import slugify from 'slugify';
 
-// function extractVideoId(urlOrId) {
-//   if (!urlOrId) return '';
-//   if (!urlOrId.includes('youtube.com') && !urlOrId.includes('youtu.be'))
-//     return urlOrId.trim();
-//   const match = urlOrId.match(
-//     /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n]+)/,
-//   );
-//   return match ? match[1] : '';
-// }
-
-const AdminCourseController = {
-  // [GET] /courses
-  async index(req, res) {
+const TeacherCourseController = {
+  async showCourses(req, res) {
     try {
       const keyword = req.query.keyword || '';
       const page = parseInt(req.query.page) || 1;
@@ -26,10 +13,15 @@ const AdminCourseController = {
       const skip = (page - 1) * limit;
       const offset = (page - 1) * limit;
 
+      const currentUserId = req.user.id;
+
       const query = {
         deleted: false,
+        teacher: currentUserId,
         name: { $regex: keyword, $options: 'i' },
       };
+
+      console.log(req.user);
 
       const [courses, total] = await Promise.all([
         Course.find(query).populate('teacher').skip(skip).limit(limit).lean(),
@@ -38,8 +30,8 @@ const AdminCourseController = {
 
       const totalPages = Math.ceil(total / limit);
 
-      res.render('admin/courses/index', {
-        layout: 'admin',
+      res.render('teachers/courses/index', {
+        layout: 'teacher',
         courses,
         currentPage: page,
         totalPages,
@@ -47,25 +39,22 @@ const AdminCourseController = {
         offset,
       });
     } catch (err) {
-      res.status(500).render('errors/500', { layout: 'admin' });
+      console.error(err);
+      res.status(500).render('errors/500', { layout: 'teacher' });
     }
   },
 
-  // [GET] /courses/create
   async createForm(req, res) {
     try {
-      const teachers = await User.find({ role: 'teacher' });
-      res.render('admin/courses/create', {
-        layout: 'admin',
+      res.render('teachers/courses/create', {
+        layout: 'teacher',
         course: {},
-        teachers: multipleToObject(teachers),
       });
     } catch (err) {
-      res.status(500).render('errors/500', { layout: 'admin' });
+      res.status(500).render('errors/500', { layout: 'teacher' });
     }
   },
 
-  // [POST] /courses/store
   async create(req, res) {
     try {
       const {
@@ -77,7 +66,6 @@ const AdminCourseController = {
         duration,
         price,
         tags,
-        teacher,
         isPublished,
       } = req.body;
 
@@ -90,30 +78,29 @@ const AdminCourseController = {
         duration,
         price: Number(price) || 0,
         tags: tags?.split(',').map((tag) => tag.trim()),
-        teacher: teacher,
+        teacher: req.user.id,
         isFree: !price || Number(price) === 0,
         isPublished: isPublished === 'on',
       });
 
       await course.save();
-      res.redirect('/admin/courses');
+      res.redirect('/teacher/courses');
     } catch (err) {
       console.error('Lỗi tạo khóa học:', err);
-      res.status(500).render('errors/500', { layout: 'admin' });
+      res.status(500).render('errors/500', { layout: 'teacher' });
     }
   },
 
-  // [GET] /courses/edit/:id
-  async editForm(req, res) {
+  async editCourse(req, res) {
     try {
       const course = await Course.findById(req.params.id).lean();
       if (!course)
-        return res.status(404).render('errors/500', { layout: 'admin' });
+        return res.status(404).render('errors/500', { layout: 'teacher' });
 
       const teachers = await User.find({ role: 'teacher' }).lean();
 
-      res.render('admin/courses/edit', {
-        layout: 'admin',
+      res.render('teachers/courses/edit', {
+        layout: 'teacher',
         course,
         teachers,
       });
@@ -122,8 +109,7 @@ const AdminCourseController = {
     }
   },
 
-  // [POST] /courses/update/:id
-  async update(req, res) {
+  async updateCourse(req, res) {
     try {
       const {
         name,
@@ -134,13 +120,12 @@ const AdminCourseController = {
         duration,
         price,
         tags,
-        teacher,
         isPublished,
       } = req.body;
 
       const course = await Course.findById(req.params.id);
       if (!course)
-        return res.status(404).render('errors/500', { layout: 'admin' });
+        return res.status(404).render('errors/500', { layout: 'teacher' });
 
       if (name && name !== course.name) {
         const baseSlug = slugify(name, { lower: true, strict: true });
@@ -160,55 +145,32 @@ const AdminCourseController = {
       course.duration = duration;
       course.price = Number(price) || 0;
       course.tags = tags?.split(',').map((tag) => tag.trim());
-      course.teacher = teacher;
       course.isFree = !price || Number(price) === 0;
       course.isPublished = isPublished === 'on';
 
       await course.save();
 
-      res.redirect('/admin/courses');
+      res.redirect('/teacher/courses');
     } catch (err) {
       console.error(err);
-      res.status(500).render('errors/500', { layout: 'admin' });
+      res.status(500).render('errors/500', { layout: 'teacher' });
     }
   },
 
-  // [POST] /courses/delete/:id
   async softDelete(req, res) {
     try {
       await Course.findByIdAndUpdate(req.params.id, { deleted: true });
-      res.redirect('/admin/courses');
+      res.redirect('/teacher/courses');
     } catch (err) {
-      res.status(500).render('errors/500', { layout: 'admin' });
+      res.status(500).render('errors/500', { layout: 'teacher' });
     }
   },
 
-  // [POST] /courses/restore/:id
-  async restore(req, res) {
-    try {
-      await Course.findByIdAndUpdate(req.params.id, { deleted: false });
-      res.redirect('/admin/courses/trash');
-    } catch (err) {
-      res.status(500).render('errors/500', { layout: 'admin' });
-    }
-  },
-
-  // [POST] /courses/force-delete/:id
-  async hardDelete(req, res) {
-    try {
-      await Course.findByIdAndDelete(req.params.id);
-      res.redirect('/admin/courses/trash');
-    } catch (err) {
-      res.status(500).render('errors/500', { layout: 'admin' });
-    }
-  },
-
-  // [GET] /courses/duplicate/:id
   async duplicate(req, res) {
     try {
       const originalCourse = await Course.findById(req.params.id).lean();
       if (!originalCourse)
-        return res.status(404).render('errors/500', { layout: 'admin' });
+        return res.status(404).render('errors/500', { layout: 'teacher' });
 
       const duplicatedCourse = new Course({
         ...originalCourse,
@@ -220,48 +182,12 @@ const AdminCourseController = {
 
       await duplicatedCourse.save();
 
-      res.redirect('/admin/courses');
+      res.redirect('/teacher/courses');
     } catch (err) {
       console.error('Lỗi khi nhân bản khóa học:', err);
-      res.status(500).render('errors/500', { layout: 'admin' });
-    }
-  },
-
-  // [GET] /courses/trash
-  async trash(req, res) {
-    try {
-      const keyword = req.query.keyword || '';
-      const page = parseInt(req.query.page) || 1;
-      const limit = 10;
-
-      const filter = {
-        deleted: true,
-        name: { $regex: keyword, $options: 'i' },
-      };
-
-      const total = await Course.countDocuments(filter);
-      const totalPages = Math.ceil(total / limit);
-      const offset = (page - 1) * limit;
-
-      const courses = await Course.find(filter)
-        .populate('teacher')
-        .skip(offset)
-        .limit(limit)
-        .lean();
-
-      res.render('admin/courses/trash', {
-        layout: 'admin',
-        courses,
-        keyword,
-        currentPage: page,
-        totalPages,
-        offset,
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).render('errors/500', { layout: 'admin' });
+      res.status(500).render('errors/500', { layout: 'teacher' });
     }
   },
 };
 
-export default AdminCourseController;
+export default TeacherCourseController;

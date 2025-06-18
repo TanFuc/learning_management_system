@@ -1,4 +1,5 @@
 import Course from '../models/Course.js';
+import User from '../models/User.js';
 import Lesson from '../models/Lesson.js';
 import LessonGroup from '../models/LessonGroup.js';
 import { multipleToObject, toObject } from '../utils/mongoose.js';
@@ -7,19 +8,41 @@ const CourseController = {
   // [GET] /courses
   async index(req, res, next) {
     try {
-      const courses = await Course.find({ isPublished: true, deleted: false })
-        .populate('teacher', 'username')
-        .lean();
+      const query = {};
+      const { search, price, teacher } = req.query;
+
+      if (search) {
+        query.name = { $regex: search, $options: 'i' };
+      }
+
+      if (price === 'free') {
+        query.price = 0;
+      } else if (price === 'paid') {
+        query.price = { $gt: 0 };
+      }
+
+      if (teacher) {
+        query.teacher = teacher;
+      }
+
+      query.isPublished = true;
+      query.deleted = false;
+
+      const [courses, teachers] = await Promise.all([
+        Course.find(query).populate('teacher', 'username').lean(),
+        User.find({ role: 'teacher' }).select('username').lean(),
+      ]);
 
       res.render('students/courses/index', {
         courses,
+        teachers,
+        query: req.query,
         currentUrl: req.originalUrl,
       });
     } catch (error) {
       next(error);
     }
   },
-
   // [GET] /courses/:slug
   async show(req, res, next) {
     try {
@@ -70,6 +93,7 @@ const CourseController = {
     }
   },
 
+  // [GET] /courses/:slug/lessons/:lessonId
   async showLesson(req, res, next) {
     try {
       const slug = req.params.slug;
@@ -112,15 +136,16 @@ const CourseController = {
     }
   },
 
-  starLearning (req, res) {
+  // [GET] /courses/:slug/start-learning
+  starLearning(req, res) {
     if (!req.user) {
-    // Chưa đăng nhập => chuyển hướng về trang đăng nhập, có thể kèm query redirect để quay lại đây sau khi login
-    return res.redirect(`/login?redirect=/courses/${req.params.slug}/lessons`);
-  }
-  
-  // Đã đăng nhập, chuyển hướng vào trang học
-  res.redirect(`/courses/${req.params.slug}/lessons`);
-  }
+      return res.redirect(
+        `/login?redirect=/courses/${req.params.slug}/lessons`,
+      );
+    }
+
+    res.redirect(`/courses/${req.params.slug}/lessons`);
+  },
 };
 
 export default CourseController;

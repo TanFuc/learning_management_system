@@ -4,7 +4,7 @@ import Course from '../models/Course.js';
 import { multipleToObject } from '../utils/mongoose.js';
 
 const AdminController = {
-  // [GET] /admin
+  // [GET] /admin/dashboard
   async index(req, res) {
     try {
       const usersCount = await User.countDocuments();
@@ -73,6 +73,7 @@ const AdminController = {
     });
   },
 
+  // [GET] /users/soft-delete/:id
   async softDeleteUser(req, res) {
     try {
       await User.findByIdAndUpdate(req.params.id, { isDeleted: true });
@@ -82,6 +83,7 @@ const AdminController = {
     }
   },
 
+  // [GET] users/restore/:id
   async restoreUser(req, res) {
     try {
       await User.findByIdAndUpdate(req.params.id, { isDeleted: false });
@@ -91,6 +93,7 @@ const AdminController = {
     }
   },
 
+  // [GET] /users/hard-delete/:id
   async hardDeleteUser(req, res) {
     try {
       await User.findByIdAndDelete(req.params.id);
@@ -144,6 +147,7 @@ const AdminController = {
     res.render('admin/users/create');
   },
 
+  // [POST] /users/create
   async createUser(req, res) {
     try {
       const { username, email, password, role } = req.body;
@@ -170,6 +174,7 @@ const AdminController = {
     }
   },
 
+  // [GET] /users/edit/:id
   async editUserForm(req, res) {
     try {
       const user = await User.findById(req.params.id).lean();
@@ -185,14 +190,16 @@ const AdminController = {
     }
   },
 
+  // [POST] /users/update/:id
   async updateUser(req, res) {
     try {
-      const { username, email, role } = req.body;
+      const { username, email, role, isVerified } = req.body;
 
       await User.findByIdAndUpdate(req.params.id, {
         username,
         email,
         role,
+        isVerified,
       });
 
       res.redirect('/admin/users');
@@ -201,6 +208,7 @@ const AdminController = {
     }
   },
 
+  // [GET] /users/block/:id
   async blockUser(req, res) {
     try {
       await User.updateOne({ _id: req.params.id }, { isBlocked: true });
@@ -210,7 +218,7 @@ const AdminController = {
     }
   },
 
-  // POST /admin/users/unblock/:id
+  // [POST] /admin/users/unblock/:id
   async unblockUser(req, res) {
     try {
       await User.updateOne({ _id: req.params.id }, { isBlocked: false });
