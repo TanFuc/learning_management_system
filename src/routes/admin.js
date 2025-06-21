@@ -6,13 +6,19 @@ import isAdmin from '../middleware/isAdmin.js';
 
 const router = express.Router();
 
+// DASHBOARD
 router.get('/dashboard', isAdmin, AdminController.index);
+
+// --- USER ---
 router.get('/users/soft-delete/:id', AdminController.softDeleteUser);
 router.get('/users/restore/:id', AdminController.restoreUser);
 router.get('/users/hard-delete/:id', AdminController.hardDeleteUser);
+
+// [GET] /users/create
 router.get('/users/create', (req, res) =>
   res.render('admin/users/create', { layout: 'admin' }),
 );
+
 router.post('/users/create', AdminController.createUser);
 router.get('/users/edit/:id', AdminController.editUserForm);
 router.post('/users/update/:id', AdminController.updateUser);
@@ -20,6 +26,7 @@ router.get('/users/block/:id', AdminController.blockUser);
 router.get('/users/unblock/:id', AdminController.unblockUser);
 router.get('/users', isAdmin, AdminController.userAdmin);
 
+// --- COURSES ---
 router.get('/courses', AdminCourse.index);
 router.get('/courses/create', AdminCourse.createForm);
 router.post('/courses/store', AdminCourse.create);
@@ -30,6 +37,8 @@ router.post('/courses/restore/:id', AdminCourse.restore);
 router.get('/courses/duplicate/:id', AdminCourse.duplicate);
 router.post('/courses/force-delete/:id', AdminCourse.hardDelete);
 router.get('/courses/trash', AdminCourse.trash);
+
+// LESSON GROUP
 
 router.get(
   '/courses/:courseId/lesson-groups',
@@ -43,6 +52,8 @@ router.post(
   '/courses/:courseId/lesson-groups/create',
   AdminLessonController.createLessonGroup,
 );
+
+// LESSON GROUP
 router.get(
   '/lesson-groups/:lessonGroupId/lessons',
   AdminLessonController.listLessons,
