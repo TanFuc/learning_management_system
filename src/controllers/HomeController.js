@@ -10,8 +10,13 @@ const HomeController = {
   // [GET] /login
   login(req, res) {
     const redirectUrl = req.query.redirect || '/';
+    const token = req.cookies?.token;
+
+    if (token) {
+      return res.redirect(redirectUrl);
+    }
+
     res.render('users/login', { redirectUrl });
-    console.log(req.query.redirect, { redirectUrl });
   },
 
   // [GET] /register
