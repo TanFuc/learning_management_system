@@ -49,7 +49,7 @@ learning_management_system/
 └── README.md             # Project documentation
 ⚙️ Setup Instructions
 1. Clone the repo
-git clone https://github.com/your-username/learning_management_system.git
+git clone https://github.com/TanFuc/learning_management_system
 cd learning_management_system
 2. Install dependencies
 npm install
